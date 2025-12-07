@@ -944,9 +944,6 @@ function renderTeacher(container) {
       <p style="text-align:center;font-size:14px;font-weight:600;margin-bottom:8px;color:#6c757d;">
         Question ${State.currentQuestion + 1}/${total}
       </p>
-      <p style="text-align:center;font-size:13px;margin-bottom:20px;color:#10b981;font-weight:600;">
-        ✅ Bonne réponse: ${q.answers[q.correct]}
-      </p>
       <div class="question-text">${q.text}</div>
       <div class="answers-grid">
         ${q.answers.map((answer, idx) => `
