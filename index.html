@@ -364,7 +364,7 @@ const DEFAULT_QUESTIONS = [
     correct: 0
   },
   {
-    text: "J'ai récité à voix haute dans la prière de l'ʿAṣr…",
+    text: "J'étais en prière et j'ai entendu la mention du Prophète Muḥammad (ﷺ)…",
     answers: ["Sajadtu qabla as-salām", "Sajadtu baʿda as-salām", "Lā sujûda ʿalayhi", "Ṣalātī ṣaḥīḥa"],
     correct: 0
   },
@@ -374,8 +374,8 @@ const DEFAULT_QUESTIONS = [
     correct: 0
   },
   {
-    text: "J'étais en prière et j'ai entendu la mention du Prophète Muḥammad (ﷺ)…",
-    answers: ["Sajadtu baʿda as-salām", "Kuriḥat wa-lākin ṣaḥḥat ṣalātī", "Baṭulat ṣalātī", "Lā sujûda ʿalayya"],
+    text: "J'étais en prière et j'ai récité à voix haute dans la prière de l’ʿAṣr…",
+    answers: ["Sajadtu qabla as-salām", "Sajadtu baʿda as-salām", "Lā sujûda ʿalayya", "Baṭulat ṣalātī"],
     correct: 0
   }
 ];
@@ -411,16 +411,21 @@ const StorageAPI = {
 // 3. BACKEND SIMULÉ
 // ============================
 const SecureBackend = {
-  async createRoom(teacherPin, questions) {
+  async createRoom(teacherPin, questions, questionDuration) {
     const roomId = Math.random().toString(36).substr(2, 6).toUpperCase();
     const room = {
       id: roomId,
       teacherPin,
-      questions,
-      currentQuestion: null, // null = lobby
+      questions: questions.map(q => ({
+        text: q.text,
+        answers: q.answers,
+        correct: q.correct
+      })),
+      status: 'lobby',          // 'lobby' | 'running' | 'finished'
+      currentQuestion: null,    // null tant que le prof n'a pas lancé
+      questionDuration,
+      questionStartedAt: null,
       students: {},
-      status: 'lobby',       // 'lobby' | 'running' | 'finished'
-      questionDuration: 20,
       createdAt: Date.now()
     };
     await StorageAPI.set(`room:${roomId}`, JSON.stringify(room));
@@ -559,7 +564,6 @@ function render() {
 
 // ---------------- Home ----------------
 function renderHome(container) {
-  // lire éventuel ?room= dans l'URL pour pré-remplir
   const params = new URLSearchParams(window.location.search);
   const roomFromUrl = params.get('room');
   if (roomFromUrl && !State.roomId) {
@@ -834,7 +838,7 @@ async function createRoom() {
   State.error = '';
   render();
 
-  const result = await SecureBackend.createRoom(State.teacherPin, State.questions);
+  const result = await SecureBackend.createRoom(State.teacherPin, State.questions, State.questionDuration);
   if (result.success) {
     State.roomId = result.roomId;
     State.mode = 'teacher';
@@ -938,14 +942,13 @@ async function autoAdvanceAfterTimer() {
   if (State.currentQuestion < total - 1) {
     await nextQuestion();
   } else {
-    // fin de quiz
-    State.teacherMode = 'quiz';
-    render();
+    const lb = await SecureBackend.getLeaderboard(State.roomId);
+    showLeaderboard(lb);
   }
 }
 
-async function showLeaderboard() {
-  const leaderboard = await SecureBackend.getLeaderboard(State.roomId);
+async function showLeaderboard(preloaded) {
+  const leaderboard = preloaded || await SecureBackend.getLeaderboard(State.roomId);
   const modal = document.getElementById('leaderboardModal');
   const content = document.getElementById('leaderboardContent');
   content.innerHTML = leaderboard.map((s, idx) => `
@@ -1000,8 +1003,8 @@ async function joinRoom() {
   const result = await SecureBackend.joinRoom(State.roomId, State.studentName);
   if (result.success) {
     State.studentId = result.studentId;
-    State.currentQuestion = result.currentQuestion ?? 0;
     if (result.status === 'running' && result.currentQuestion !== null) {
+      State.currentQuestion = result.currentQuestion;
       State.mode = 'student';
       State.startTime = Date.now();
       startPolling();
@@ -1045,9 +1048,10 @@ function startPolling() {
   State.pollInterval = setInterval(async () => {
     const room = await SecureBackend.getRoom(State.roomId);
     if (!room) return;
-    if (room.status === 'running' && State.mode === 'studentWaiting') {
+
+    if (State.mode === 'studentWaiting' && room.status === 'running' && room.currentQuestion !== null) {
       State.mode = 'student';
-      State.currentQuestion = room.currentQuestion ?? 0;
+      State.currentQuestion = room.currentQuestion;
       State.hasAnswered = false;
       State.selectedAnswer = null;
       State.result = null;
@@ -1055,13 +1059,14 @@ function startPolling() {
       render();
       return;
     }
-    if (room.currentQuestion !== null && room.currentQuestion !== State.currentQuestion) {
+
+    if (State.mode === 'student' && room.currentQuestion !== null && room.currentQuestion !== State.currentQuestion) {
       State.currentQuestion = room.currentQuestion;
       State.hasAnswered = false;
       State.selectedAnswer = null;
       State.result = null;
       State.startTime = Date.now();
-      if (State.mode === 'student') render();
+      render();
     }
   }, 2000);
 }
