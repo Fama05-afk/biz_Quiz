@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
   <title>Quiz Fiqh Sécurisé — Style Kahoot</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+  <!-- Firebase (compat) -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -349,9 +354,26 @@
 </div>
 
 <script>
-// ============================
-// 1. QUESTIONS PAR DÉFAUT
-// ============================
+/***********************
+ * 0. CONFIG FIREBASE  *
+ ***********************/
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDLzJY6cAsVCGjr9UeVqtXIBDxJ5h6NidM",
+  authDomain: "quiz-fiqh-daara.firebaseapp.com",
+  projectId: "quiz-fiqh-daara",
+  storageBucket: "quiz-fiqh-daara.firebasestorage.app",
+  messagingSenderId: "712156746564",
+  appId: "1:712156746564:web:c58062dd7b82eaed973d11"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+
+/***********************
+ * 1. QUESTIONS PAR DÉFAUT
+ ***********************/
 const DEFAULT_QUESTIONS = [
   {
     text: "Celui qui a oublié le qunût dans la prière du matin…",
@@ -380,153 +402,152 @@ const DEFAULT_QUESTIONS = [
   }
 ];
 
-// ============================
-// 2. STORAGE SIMPLIFIÉ (mémoire locale)
-// ============================
-const inMemoryStorage = {};
-
-const StorageAPI = {
-  async set(key, value) {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        inMemoryStorage[key] = value;
-        resolve({ key, value });
-      }, 10);
-    });
-  },
-  async get(key) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (inMemoryStorage[key]) {
-          resolve({ key, value: inMemoryStorage[key] });
-        } else {
-          reject(new Error('Key not found'));
-        }
-      }, 10);
-    });
-  }
-};
-
-// ============================
-// 3. BACKEND SIMULÉ
-// ============================
+/***********************
+ * 2. BACKEND FIRESTORE
+ ***********************/
 const SecureBackend = {
   async createRoom(teacherPin, questions, questionDuration) {
     const roomId = Math.random().toString(36).substr(2, 6).toUpperCase();
-    const room = {
-      id: roomId,
+    const roomRef = db.collection('rooms').doc(roomId);
+    const roomData = {
       teacherPin,
-      questions: questions.map(q => ({
-        text: q.text,
-        answers: q.answers,
-        correct: q.correct
-      })),
+      questions,
       status: 'lobby',          // 'lobby' | 'running' | 'finished'
-      currentQuestion: null,    // null tant que le prof n'a pas lancé
+      currentQuestion: null,    // null tant que pas lancé
       questionDuration,
       questionStartedAt: null,
-      students: {},
       createdAt: Date.now()
     };
-    await StorageAPI.set(`room:${roomId}`, JSON.stringify(room));
+    await roomRef.set(roomData);
     return { success: true, roomId };
   },
 
   async getRoom(roomId) {
-    try {
-      const result = await StorageAPI.get(`room:${roomId}`);
-      return JSON.parse(result.value);
-    } catch {
-      return null;
-    }
+    const roomRef = db.collection('rooms').doc(roomId);
+    const snap = await roomRef.get();
+    if (!snap.exists) return null;
+    return { id: snap.id, ...snap.data() };
+  },
+
+  async getRoomWithStudents(roomId) {
+    const roomRef = db.collection('rooms').doc(roomId);
+    const [roomSnap, studentsSnap] = await Promise.all([
+      roomRef.get(),
+      roomRef.collection('students').get()
+    ]);
+    if (!roomSnap.exists) return null;
+    const room = { id: roomSnap.id, ...roomSnap.data() };
+    const students = studentsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+    return { room, students };
   },
 
   async joinRoom(roomId, studentName) {
-    const room = await this.getRoom(roomId);
-    if (!room) return { success: false, error: "Salle introuvable" };
+    const roomRef = db.collection('rooms').doc(roomId);
+    const roomSnap = await roomRef.get();
+    if (!roomSnap.exists) return { success: false, error: "Salle introuvable" };
+    const room = roomSnap.data();
 
-    const studentId = Math.random().toString(36).substr(2, 9);
-    room.students[studentId] = {
+    const studentRef = roomRef.collection('students').doc();
+    await studentRef.set({
       name: studentName,
       score: 0,
       answers: {},
       joinedAt: Date.now()
-    };
+    });
 
-    await StorageAPI.set(`room:${roomId}`, JSON.stringify(room));
     return {
       success: true,
-      studentId,
-      currentQuestion: room.currentQuestion,
-      status: room.status
+      studentId: studentRef.id,
+      status: room.status,
+      currentQuestion: room.currentQuestion
     };
   },
 
   async submitAnswer(roomId, studentId, questionIndex, answerIndex, timeSpent) {
-    const room = await this.getRoom(roomId);
-    if (!room || !room.students[studentId]) {
-      return { success: false, error: "Session invalide" };
-    }
-    const question = room.questions[questionIndex];
-    if (!question) return { success: false, error: "Question invalide" };
+    const roomRef = db.collection('rooms').doc(roomId);
+    const studentRef = roomRef.collection('students').doc(studentId);
 
-    if (room.students[studentId].answers[questionIndex]) {
-      return { success: false, error: "Déjà répondu", alreadyAnswered: true };
-    }
+    const result = await db.runTransaction(async (tx) => {
+      const roomSnap = await tx.get(roomRef);
+      const studentSnap = await tx.get(studentRef);
+      if (!roomSnap.exists || !studentSnap.exists) {
+        throw new Error('Session invalide');
+      }
+      const room = roomSnap.data();
+      const student = studentSnap.data();
+      const question = room.questions[questionIndex];
+      if (!question) {
+        throw new Error('Question invalide');
+      }
+      const answers = student.answers || {};
+      if (answers[questionIndex] !== undefined) {
+        return { success: false, alreadyAnswered: true };
+      }
 
-    const isCorrect = answerIndex === question.correct;
-    let points = 0;
-    if (isCorrect) {
-      points = 1000;
-      if (timeSpent < 3000) points += 500;
-      else if (timeSpent < 5000) points += 300;
-      else if (timeSpent < 10000) points += 100;
-    }
+      const isCorrect = answerIndex === question.correct;
+      let points = 0;
+      if (isCorrect) {
+        points = 1000;
+        if (timeSpent < 3000) points += 500;
+        else if (timeSpent < 5000) points += 300;
+        else if (timeSpent < 10000) points += 100;
+      }
 
-    room.students[studentId].answers[questionIndex] = {
-      answer: answerIndex,
-      correct: isCorrect,
-      points,
-      timeSpent,
-      timestamp: Date.now()
-    };
-    room.students[studentId].score += points;
+      answers[questionIndex] = {
+        answer: answerIndex,
+        correct: isCorrect,
+        points,
+        timeSpent,
+        timestamp: Date.now()
+      };
+      const newScore = (student.score || 0) + points;
 
-    await StorageAPI.set(`room:${roomId}`, JSON.stringify(room));
-    return {
-      success: true,
-      correct: isCorrect,
-      correctAnswer: question.correct,
-      points,
-      totalScore: room.students[studentId].score
-    };
+      tx.update(studentRef, {
+        answers,
+        score: newScore
+      });
+
+      return {
+        success: true,
+        correct: isCorrect,
+        correctAnswer: question.correct,
+        points,
+        totalScore: newScore
+      };
+    });
+
+    return result;
   },
 
   async startOrGoToQuestion(roomId, teacherPin, questionIndex, durationSec) {
-    const room = await this.getRoom(roomId);
-    if (!room || room.teacherPin !== teacherPin) {
+    const roomRef = db.collection('rooms').doc(roomId);
+    const roomSnap = await roomRef.get();
+    if (!roomSnap.exists) return { success: false, error: "Salle introuvable" };
+    const room = roomSnap.data();
+    if (room.teacherPin !== teacherPin) {
       return { success: false, error: "Non autorisé" };
     }
-    room.currentQuestion = questionIndex;
-    room.status = 'running';
-    room.questionDuration = durationSec;
-    room.questionStartedAt = Date.now();
-    await StorageAPI.set(`room:${roomId}`, JSON.stringify(room));
+    await roomRef.update({
+      currentQuestion: questionIndex,
+      status: 'running',
+      questionDuration: durationSec,
+      questionStartedAt: Date.now()
+    });
     return { success: true };
   },
 
   async getLeaderboard(roomId) {
-    const room = await this.getRoom(roomId);
-    if (!room) return [];
-    return Object.entries(room.students)
-      .map(([id, s]) => ({ id, name: s.name, score: s.score }))
-      .sort((a, b) => b.score - a.score);
+    const roomRef = db.collection('rooms').doc(roomId);
+    const snap = await roomRef.collection('students')
+      .orderBy('score', 'desc')
+      .get();
+    return snap.docs.map(d => ({ id: d.id, ...d.data() }));
   }
 };
 
-// ============================
-// 4. ÉTAT GLOBAL
-// ============================
+/***********************
+ * 3. ÉTAT GLOBAL
+ ***********************/
 const State = {
   mode: 'home',          // 'home' | 'teacher' | 'student' | 'studentWaiting'
   teacherMode: 'lobby',  // 'lobby' | 'quiz'
@@ -551,9 +572,9 @@ const State = {
   timerInterval: null
 };
 
-// ============================
-// 5. RENDER PRINCIPAL
-// ============================
+/***********************
+ * 4. RENDER PRINCIPAL
+ ***********************/
 function render() {
   const app = document.getElementById('app');
   if (State.mode === 'home') renderHome(app);
@@ -562,7 +583,7 @@ function render() {
   else if (State.mode === 'studentWaiting') renderStudentWaiting(app);
 }
 
-// ---------------- Home ----------------
+/*********** HOME ***********/
 function renderHome(container) {
   const params = new URLSearchParams(window.location.search);
   const roomFromUrl = params.get('room');
@@ -573,7 +594,7 @@ function renderHome(container) {
   container.innerHTML = `
     <div class="header">
       <h1>Quiz Fiqh Sécurisé</h1>
-      <p>Mini-Kahoot sans backend — version démo</p>
+      <p>Mini-Kahoot multi-appareils avec Firebase</p>
     </div>
     <div class="content">
       <div class="mode-section teacher">
@@ -610,9 +631,8 @@ function renderHome(container) {
       ${State.error ? `<div class="error">${State.error}</div>` : ''}
       
       <div class="info">
-        <p>🔒 Version locale sans vrai serveur (démo développeur)</p>
-        <p>⏱ Durée par question gérée côté enseignant</p>
-        <p>📱 QR code généré quand la salle est créée</p>
+        <p>🔐 Le PIN sert juste à empêcher un élève d’appuyer sur “Suivant” à ta place.</p>
+        <p>📱 Le QR code permet aux élèves de rejoindre facilement avec leur téléphone.</p>
       </div>
     </div>
   `;
@@ -631,9 +651,11 @@ function renderHome(container) {
   });
 }
 
-// ---------------- Teacher ----------------
+/*********** TEACHER ***********/
 function renderTeacher(container) {
-  const room = State.roomSnapshot;
+  const snapshot = State.roomSnapshot;
+  const room = snapshot ? snapshot.room : null;
+  const students = snapshot ? snapshot.students : [];
   const q = State.questions[State.currentQuestion] || State.questions[0];
   const total = State.questions.length;
   const progress = ((State.currentQuestion + 1) / total) * 100;
@@ -641,7 +663,6 @@ function renderTeacher(container) {
   if (State.teacherMode === 'lobby') {
     const joinUrl = window.location.origin + window.location.pathname + '?room=' + State.roomId;
     const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=' + encodeURIComponent(joinUrl);
-    const students = room && room.students ? Object.values(room.students) : [];
 
     container.innerHTML = `
       <div class="header">
@@ -755,7 +776,7 @@ function renderTeacher(container) {
   }
 }
 
-// -------------- Student waiting --------------
+/*********** STUDENT WAITING ***********/
 function renderStudentWaiting(container) {
   container.innerHTML = `
     <div class="header">
@@ -772,7 +793,7 @@ function renderStudentWaiting(container) {
   `;
 }
 
-// -------------- Student quiz --------------
+/*********** STUDENT QUIZ ***********/
 function renderStudent(container) {
   const q = State.questions[State.currentQuestion];
   const total = State.questions.length;
@@ -825,9 +846,9 @@ function renderStudent(container) {
   `;
 }
 
-// ============================
-// 6. ACTIONS ENSEIGNANT
-// ============================
+/***********************
+ * 5. ACTIONS ENSEIGNANT
+ ***********************/
 async function createRoom() {
   if (!State.teacherPin || State.teacherPin.length < 4) {
     State.error = "Le PIN doit contenir au moins 4 caractères";
@@ -837,18 +858,21 @@ async function createRoom() {
   State.loading = true;
   State.error = '';
   render();
-
-  const result = await SecureBackend.createRoom(State.teacherPin, State.questions, State.questionDuration);
-  if (result.success) {
-    State.roomId = result.roomId;
-    State.mode = 'teacher';
-    State.teacherMode = 'lobby';
-    State.currentQuestion = 0;
-    State.remainingTime = null;
-    await refreshTeacherRoom();
-    startTeacherPolling();
-  } else {
-    State.error = result.error || "Erreur de création";
+  try {
+    const result = await SecureBackend.createRoom(State.teacherPin, State.questions, State.questionDuration);
+    if (result.success) {
+      State.roomId = result.roomId;
+      State.mode = 'teacher';
+      State.teacherMode = 'lobby';
+      State.currentQuestion = 0;
+      State.remainingTime = null;
+      await refreshTeacherRoom();
+      startTeacherPolling();
+    } else {
+      State.error = result.error || "Erreur de création";
+    }
+  } catch (e) {
+    State.error = e.message || "Erreur Firebase";
   }
   State.loading = false;
   render();
@@ -895,15 +919,16 @@ function shuffleQuestions() {
 }
 
 async function refreshTeacherRoom() {
-  const room = await SecureBackend.getRoom(State.roomId);
-  State.roomSnapshot = room;
+  const data = await SecureBackend.getRoomWithStudents(State.roomId);
+  State.roomSnapshot = data;
 }
 
 function startTeacherPolling() {
   stopTeacherPolling();
   State.teacherPollInterval = setInterval(async () => {
+    if (State.mode !== 'teacher') return;
     await refreshTeacherRoom();
-    if (State.mode === 'teacher') render();
+    render();
   }, 2000);
 }
 
@@ -987,9 +1012,9 @@ function backToHome() {
   render();
 }
 
-// ============================
-// 7. ACTIONS ÉLÈVE
-// ============================
+/***********************
+ * 6. ACTIONS ÉLÈVE
+ ***********************/
 async function joinRoom() {
   if (!State.roomId || !State.studentName) {
     State.error = "Remplis tous les champs";
@@ -999,21 +1024,24 @@ async function joinRoom() {
   State.loading = true;
   State.error = '';
   render();
-
-  const result = await SecureBackend.joinRoom(State.roomId, State.studentName);
-  if (result.success) {
-    State.studentId = result.studentId;
-    if (result.status === 'running' && result.currentQuestion !== null) {
-      State.currentQuestion = result.currentQuestion;
-      State.mode = 'student';
-      State.startTime = Date.now();
-      startPolling();
+  try {
+    const result = await SecureBackend.joinRoom(State.roomId, State.studentName);
+    if (result.success) {
+      State.studentId = result.studentId;
+      if (result.status === 'running' && result.currentQuestion !== null) {
+        State.currentQuestion = result.currentQuestion;
+        State.mode = 'student';
+        State.startTime = Date.now();
+        startPolling();
+      } else {
+        State.mode = 'studentWaiting';
+        startPolling();
+      }
     } else {
-      State.mode = 'studentWaiting';
-      startPolling();
+      State.error = result.error || "Erreur de connexion";
     }
-  } else {
-    State.error = result.error || "Erreur de connexion";
+  } catch (e) {
+    State.error = e.message || "Erreur Firebase";
   }
   State.loading = false;
   render();
@@ -1025,19 +1053,22 @@ async function submitAnswer(answerIndex) {
   State.selectedAnswer = answerIndex;
   State.hasAnswered = true;
   render();
-
-  const result = await SecureBackend.submitAnswer(
-    State.roomId,
-    State.studentId,
-    State.currentQuestion,
-    answerIndex,
-    timeSpent
-  );
-  if (result.success) {
-    State.result = result;
-    State.score = result.totalScore;
-  } else if (result.alreadyAnswered) {
-    State.error = "Tu as déjà répondu à cette question";
+  try {
+    const result = await SecureBackend.submitAnswer(
+      State.roomId,
+      State.studentId,
+      State.currentQuestion,
+      answerIndex,
+      timeSpent
+    );
+    if (result.success) {
+      State.result = result;
+      State.score = result.totalScore;
+    } else if (result.alreadyAnswered) {
+      State.error = "Tu as déjà répondu à cette question";
+    }
+  } catch (e) {
+    State.error = e.message || "Erreur lors de l'envoi de la réponse";
   }
   render();
 }
