@@ -5,18 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quiz Fiqh Sécurisé — Style Kahoot</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
       min-height: 100vh;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     }
-    
     .container {
       min-height: 100vh;
       display: flex;
@@ -24,7 +18,6 @@
       justify-content: center;
       padding: 20px;
     }
-    
     .card {
       background: white;
       border-radius: 24px;
@@ -33,28 +26,14 @@
       width: 100%;
       overflow: hidden;
     }
-    
     .header {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       padding: 24px;
       color: white;
     }
-    
-    .header h1 {
-      font-size: 28px;
-      font-weight: 800;
-      margin-bottom: 4px;
-    }
-    
-    .header p {
-      opacity: 0.9;
-      font-size: 14px;
-    }
-    
-    .content {
-      padding: 32px 24px;
-    }
-    
+    .header h1 { font-size: 28px; font-weight: 800; margin-bottom: 4px; }
+    .header p { opacity: 0.9; font-size: 14px; }
+    .content { padding: 32px 24px; }
     .mode-section {
       background: linear-gradient(135deg, #f6f8fb 0%, #e9ecef 100%);
       padding: 24px;
@@ -62,17 +41,14 @@
       margin-bottom: 20px;
       border: 3px solid #dee2e6;
     }
-    
     .mode-section.teacher {
       border-color: #667eea;
       background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
     }
-    
     .mode-section.student {
       border-color: #10b981;
       background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
     }
-    
     .mode-title {
       display: flex;
       align-items: center;
@@ -81,7 +57,6 @@
       font-size: 20px;
       font-weight: 700;
     }
-    
     .icon {
       width: 36px;
       height: 36px;
@@ -91,10 +66,8 @@
       justify-content: center;
       font-size: 20px;
     }
-    
     .icon.teacher { background: #667eea; }
     .icon.student { background: #10b981; }
-    
     input {
       width: 100%;
       padding: 12px 16px;
@@ -104,12 +77,7 @@
       margin-bottom: 12px;
       font-family: inherit;
     }
-    
-    input:focus {
-      outline: none;
-      border-color: #667eea;
-    }
-    
+    input:focus { outline: none; border-color: #667eea; }
     .btn {
       width: 100%;
       padding: 14px;
@@ -121,43 +89,31 @@
       transition: all 0.2s;
       font-family: inherit;
     }
-    
-    .btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-    
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
     .btn-primary {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
       box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
     }
-    
     .btn-primary:hover:not(:disabled) {
       transform: translateY(-2px);
       box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
     }
-    
     .btn-success {
       background: linear-gradient(135deg, #10b981 0%, #059669 100%);
       color: white;
       box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
     }
-    
     .btn-success:hover:not(:disabled) {
       transform: translateY(-2px);
       box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
     }
-    
     .btn-secondary {
       background: #e9ecef;
       color: #495057;
     }
-    
-    .btn-secondary:hover:not(:disabled) {
-      background: #dee2e6;
-    }
-    
+    .btn-secondary:hover:not(:disabled) { background: #dee2e6; }
+    .btn-small { padding: 8px 16px; font-size: 14px; width: auto; }
     .error {
       background: #fee;
       border: 2px solid #fcc;
@@ -168,19 +124,13 @@
       margin-top: 12px;
       font-weight: 600;
     }
-    
     .info {
       text-align: center;
       color: #6c757d;
       font-size: 13px;
       margin-top: 20px;
     }
-    
-    .info p {
-      margin: 4px 0;
-    }
-    
-    /* Quiz screen styles */
+    .info p { margin: 4px 0; }
     .quiz-header {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       padding: 20px 24px;
@@ -191,31 +141,11 @@
       flex-wrap: wrap;
       gap: 12px;
     }
-    
-    .quiz-info h2 {
-      font-size: 24px;
-      font-weight: 800;
-    }
-    
-    .quiz-info p {
-      opacity: 0.9;
-      font-size: 14px;
-    }
-    
-    .score-display {
-      text-align: right;
-    }
-    
-    .score-display .score {
-      font-size: 32px;
-      font-weight: 900;
-    }
-    
-    .score-display .label {
-      font-size: 12px;
-      opacity: 0.8;
-    }
-    
+    .quiz-info h2 { font-size: 24px; font-weight: 800; }
+    .quiz-info p { opacity: 0.9; font-size: 14px; }
+    .score-display { text-align: right; }
+    .score-display .score { font-size: 32px; font-weight: 900; }
+    .score-display .label { font-size: 12px; opacity: 0.8; }
     .progress-bar {
       height: 12px;
       background: #e9ecef;
@@ -223,17 +153,12 @@
       overflow: hidden;
       margin: 20px 24px;
     }
-    
     .progress-fill {
       height: 100%;
       background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
       transition: width 0.3s;
     }
-    
-    .question-card {
-      padding: 32px 24px;
-    }
-    
+    .question-card { padding: 32px 24px; }
     .question-text {
       font-size: 24px;
       font-weight: 700;
@@ -241,13 +166,7 @@
       margin-bottom: 32px;
       color: #212529;
     }
-    
-    .answers-grid {
-      display: grid;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-    
+    .answers-grid { display: grid; gap: 12px; margin-bottom: 20px; }
     .answer-btn {
       padding: 16px 20px;
       border: 3px solid #dee2e6;
@@ -260,34 +179,26 @@
       transition: all 0.2s;
       font-family: inherit;
     }
-    
     .answer-btn:hover:not(:disabled) {
       border-color: #667eea;
       transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
-    
-    .answer-btn:disabled {
-      cursor: not-allowed;
-    }
-    
+    .answer-btn:disabled { cursor: not-allowed; }
     .answer-btn.correct {
       background: #d1fae5;
       border-color: #10b981;
       color: #065f46;
     }
-    
     .answer-btn.wrong {
       background: #fee2e2;
       border-color: #ef4444;
       color: #991b1b;
     }
-    
     .answer-btn.selected {
       background: #e0e7ff;
       border-color: #667eea;
     }
-    
     .result-message {
       padding: 16px;
       border-radius: 12px;
@@ -296,68 +207,98 @@
       font-size: 18px;
       margin-top: 20px;
     }
-    
-    .result-message.success {
-      background: #d1fae5;
-      color: #065f46;
-    }
-    
-    .result-message.error {
-      background: #fee2e2;
-      color: #991b1b;
-    }
-    
+    .result-message.success { background: #d1fae5; color: #065f46; }
+    .result-message.error { background: #fee2e2; color: #991b1b; }
     .controls {
       display: flex;
       gap: 12px;
       margin-top: 24px;
       flex-wrap: wrap;
     }
-    
-    .controls .btn {
-      flex: 1;
-      min-width: 140px;
-    }
-    
+    .controls .btn { flex: 1; min-width: 140px; }
     .toolbar {
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
       margin-top: 12px;
+      align-items: center;
     }
-    
-    .btn-small {
-      padding: 8px 16px;
-      font-size: 14px;
-      width: auto;
-    }
-    
     .room-code {
       font-family: 'Courier New', monospace;
       font-size: 24px;
       font-weight: 900;
       letter-spacing: 2px;
     }
-    
+    .timer-badge {
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.2);
+      font-size: 13px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .timer-badge span {
+      font-weight: 700;
+    }
+    .lobby-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 20px;
+      margin-top: 24px;
+      align-items: flex-start;
+    }
+    .lobby-panel {
+      background: #f8fafc;
+      border-radius: 16px;
+      padding: 16px;
+      border: 1px solid #e2e8f0;
+    }
+    .lobby-panel h3 {
+      font-size: 16px;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+    .student-list {
+      max-height: 180px;
+      overflow-y: auto;
+      margin-top: 8px;
+    }
+    .student-chip {
+      background: #e0f2fe;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 13px;
+      margin: 4px;
+      display: inline-block;
+    }
+    .qr-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      text-align: center;
+      font-size: 12px;
+      color: #4b5563;
+      word-break: break-all;
+    }
+    .qr-wrapper img {
+      border-radius: 16px;
+      border: 4px solid #e5e7eb;
+      background: white;
+    }
     /* Modal */
     .modal {
       display: none;
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      top: 0; left: 0; right: 0; bottom: 0;
       background: rgba(0,0,0,0.7);
       z-index: 1000;
       align-items: center;
       justify-content: center;
       padding: 20px;
     }
-    
-    .modal.active {
-      display: flex;
-    }
-    
+    .modal.active { display: flex; }
     .modal-content {
       background: white;
       border-radius: 16px;
@@ -367,13 +308,11 @@
       max-height: 90vh;
       overflow-y: auto;
     }
-    
     .modal h3 {
       font-size: 24px;
       margin-bottom: 16px;
       text-align: center;
     }
-    
     .leaderboard-item {
       display: flex;
       justify-content: space-between;
@@ -383,28 +322,15 @@
       border-radius: 8px;
       margin-bottom: 8px;
     }
-    
-    .leaderboard-item .name {
-      font-weight: 700;
-      font-size: 18px;
+    .leaderboard-item .name { font-weight: 700; font-size: 18px; }
+    .leaderboard-item .score { font-weight: 900; font-size: 20px; color: #667eea; }
+    @media (max-width: 700px) {
+      .lobby-grid { grid-template-columns: 1fr; }
     }
-    
-    .leaderboard-item .score {
-      font-weight: 900;
-      font-size: 20px;
-      color: #667eea;
-    }
-    
     @media (max-width: 600px) {
-      .quiz-header {
-        text-align: center;
-      }
-      .score-display {
-        text-align: center;
-      }
-      .question-text {
-        font-size: 20px;
-      }
+      .quiz-header { text-align: center; }
+      .score-display { text-align: center; }
+      .question-text { font-size: 20px; }
     }
   </style>
 </head>
@@ -423,10 +349,9 @@
 </div>
 
 <script>
-// ============================================
-// CONFIGURATION ET DONNÉES
-// ============================================
-
+// ============================
+// 1. QUESTIONS PAR DÉFAUT
+// ============================
 const DEFAULT_QUESTIONS = [
   {
     text: "Celui qui a oublié le qunût dans la prière du matin…",
@@ -455,27 +380,25 @@ const DEFAULT_QUESTIONS = [
   }
 ];
 
-// ============================================
-// STORAGE SIMULATION (in-memory for now)
-// ============================================
-
+// ============================
+// 2. STORAGE SIMPLIFIÉ (mémoire locale)
+// ============================
 const inMemoryStorage = {};
 
 const StorageAPI = {
-  async set(key, value, shared = false) {
+  async set(key, value) {
     return new Promise((resolve) => {
       setTimeout(() => {
         inMemoryStorage[key] = value;
-        resolve({ key, value, shared });
+        resolve({ key, value });
       }, 10);
     });
   },
-  
-  async get(key, shared = false) {
+  async get(key) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         if (inMemoryStorage[key]) {
-          resolve({ key, value: inMemoryStorage[key], shared });
+          resolve({ key, value: inMemoryStorage[key] });
         } else {
           reject(new Error('Key not found'));
         }
@@ -484,34 +407,30 @@ const StorageAPI = {
   }
 };
 
-// ============================================
-// BACKEND SÉCURISÉ
-// ============================================
-
+// ============================
+// 3. BACKEND SIMULÉ
+// ============================
 const SecureBackend = {
   async createRoom(teacherPin, questions) {
     const roomId = Math.random().toString(36).substr(2, 6).toUpperCase();
     const room = {
       id: roomId,
-      teacherPin: teacherPin,
-      questions: questions,
-      currentQuestion: 0,
+      teacherPin,
+      questions,
+      currentQuestion: null, // null = lobby
       students: {},
+      status: 'lobby',       // 'lobby' | 'running' | 'finished'
+      questionDuration: 20,
       createdAt: Date.now()
     };
-    
-    try {
-      await StorageAPI.set(`room:${roomId}`, JSON.stringify(room), true);
-      return { success: true, roomId };
-    } catch (e) {
-      return { success: false, error: "Erreur de création" };
-    }
+    await StorageAPI.set(`room:${roomId}`, JSON.stringify(room));
+    return { success: true, roomId };
   },
 
   async getRoom(roomId) {
     try {
-      const result = await StorageAPI.get(`room:${roomId}`, true);
-      return result ? JSON.parse(result.value) : null;
+      const result = await StorageAPI.get(`room:${roomId}`);
+      return JSON.parse(result.value);
     } catch {
       return null;
     }
@@ -520,7 +439,7 @@ const SecureBackend = {
   async joinRoom(roomId, studentName) {
     const room = await this.getRoom(roomId);
     if (!room) return { success: false, error: "Salle introuvable" };
-    
+
     const studentId = Math.random().toString(36).substr(2, 9);
     room.students[studentId] = {
       name: studentName,
@@ -528,13 +447,14 @@ const SecureBackend = {
       answers: {},
       joinedAt: Date.now()
     };
-    
-    try {
-      await StorageAPI.set(`room:${roomId}`, JSON.stringify(room), true);
-      return { success: true, studentId, currentQuestion: room.currentQuestion };
-    } catch (e) {
-      return { success: false, error: "Erreur de connexion" };
-    }
+
+    await StorageAPI.set(`room:${roomId}`, JSON.stringify(room));
+    return {
+      success: true,
+      studentId,
+      currentQuestion: room.currentQuestion,
+      status: room.status
+    };
   },
 
   async submitAnswer(roomId, studentId, questionIndex, answerIndex, timeSpent) {
@@ -542,7 +462,6 @@ const SecureBackend = {
     if (!room || !room.students[studentId]) {
       return { success: false, error: "Session invalide" };
     }
-
     const question = room.questions[questionIndex];
     if (!question) return { success: false, error: "Question invalide" };
 
@@ -551,7 +470,6 @@ const SecureBackend = {
     }
 
     const isCorrect = answerIndex === question.correct;
-    
     let points = 0;
     if (isCorrect) {
       points = 1000;
@@ -569,8 +487,7 @@ const SecureBackend = {
     };
     room.students[studentId].score += points;
 
-    await StorageAPI.set(`room:${roomId}`, JSON.stringify(room), true);
-
+    await StorageAPI.set(`room:${roomId}`, JSON.stringify(room));
     return {
       success: true,
       correct: isCorrect,
@@ -580,37 +497,34 @@ const SecureBackend = {
     };
   },
 
-  async updateCurrentQuestion(roomId, teacherPin, questionIndex) {
+  async startOrGoToQuestion(roomId, teacherPin, questionIndex, durationSec) {
     const room = await this.getRoom(roomId);
     if (!room || room.teacherPin !== teacherPin) {
       return { success: false, error: "Non autorisé" };
     }
-
     room.currentQuestion = questionIndex;
-    await StorageAPI.set(`room:${roomId}`, JSON.stringify(room), true);
+    room.status = 'running';
+    room.questionDuration = durationSec;
+    room.questionStartedAt = Date.now();
+    await StorageAPI.set(`room:${roomId}`, JSON.stringify(room));
     return { success: true };
   },
 
   async getLeaderboard(roomId) {
     const room = await this.getRoom(roomId);
     if (!room) return [];
-
     return Object.entries(room.students)
-      .map(([id, student]) => ({
-        id,
-        name: student.name,
-        score: student.score
-      }))
+      .map(([id, s]) => ({ id, name: s.name, score: s.score }))
       .sort((a, b) => b.score - a.score);
   }
 };
 
-// ============================================
-// STATE MANAGEMENT
-// ============================================
-
+// ============================
+// 4. ÉTAT GLOBAL
+// ============================
 const State = {
-  mode: 'home',
+  mode: 'home',          // 'home' | 'teacher' | 'student' | 'studentWaiting'
+  teacherMode: 'lobby',  // 'lobby' | 'quiz'
   roomId: '',
   teacherPin: '',
   studentName: '',
@@ -624,30 +538,38 @@ const State = {
   startTime: Date.now(),
   error: '',
   loading: false,
-  pollInterval: null
+  pollInterval: null,
+  teacherPollInterval: null,
+  roomSnapshot: null,
+  questionDuration: 20,
+  remainingTime: null,
+  timerInterval: null
 };
 
-// ============================================
-// RENDER FUNCTIONS
-// ============================================
-
+// ============================
+// 5. RENDER PRINCIPAL
+// ============================
 function render() {
   const app = document.getElementById('app');
-  
-  if (State.mode === 'home') {
-    renderHome(app);
-  } else if (State.mode === 'teacher') {
-    renderTeacher(app);
-  } else if (State.mode === 'student') {
-    renderStudent(app);
-  }
+  if (State.mode === 'home') renderHome(app);
+  else if (State.mode === 'teacher') renderTeacher(app);
+  else if (State.mode === 'student') renderStudent(app);
+  else if (State.mode === 'studentWaiting') renderStudentWaiting(app);
 }
 
+// ---------------- Home ----------------
 function renderHome(container) {
+  // lire éventuel ?room= dans l'URL pour pré-remplir
+  const params = new URLSearchParams(window.location.search);
+  const roomFromUrl = params.get('room');
+  if (roomFromUrl && !State.roomId) {
+    State.roomId = roomFromUrl.toUpperCase();
+  }
+
   container.innerHTML = `
     <div class="header">
       <h1>Quiz Fiqh Sécurisé</h1>
-      <p>Version Kahoot avec protection anti-triche</p>
+      <p>Mini-Kahoot sans backend — version démo</p>
     </div>
     <div class="content">
       <div class="mode-section teacher">
@@ -656,6 +578,14 @@ function renderHome(container) {
           <span>Mode Enseignant</span>
         </div>
         <input type="password" id="teacherPin" placeholder="Crée un PIN (min 4 caractères)" value="${State.teacherPin}">
+        <div style="display:flex; gap:8px; align-items:center; margin-bottom:12px;">
+          <label style="font-size:13px; color:#4b5563;">Durée par question :</label>
+          <select id="durationSelect" style="flex:1; padding:8px 10px; border-radius:10px; border:1px solid #d1d5db;">
+            <option value="10" ${State.questionDuration===10?'selected':''}>10 s</option>
+            <option value="20" ${State.questionDuration===20?'selected':''}>20 s</option>
+            <option value="30" ${State.questionDuration===30?'selected':''}>30 s</option>
+          </select>
+        </div>
         <button class="btn btn-primary" onclick="createRoom()" ${State.loading ? 'disabled' : ''}>
           ${State.loading ? 'Création...' : 'Créer une salle'}
         </button>
@@ -676,89 +606,174 @@ function renderHome(container) {
       ${State.error ? `<div class="error">${State.error}</div>` : ''}
       
       <div class="info">
-        <p>🔒 Les réponses sont sécurisées côté serveur</p>
-        <p>⚡ Bonus de points pour la rapidité</p>
+        <p>🔒 Version locale sans vrai serveur (démo développeur)</p>
+        <p>⏱ Durée par question gérée côté enseignant</p>
+        <p>📱 QR code généré quand la salle est créée</p>
       </div>
     </div>
   `;
-  
-  const pinInput = document.getElementById('teacherPin');
-  if (pinInput) {
-    pinInput.addEventListener('input', (e) => {
-      State.teacherPin = e.target.value;
-    });
-  }
-  
-  const roomInput = document.getElementById('roomCode');
-  if (roomInput) {
-    roomInput.addEventListener('input', (e) => {
-      State.roomId = e.target.value.toUpperCase();
-    });
-  }
-  
-  const nameInput = document.getElementById('studentName');
-  if (nameInput) {
-    nameInput.addEventListener('input', (e) => {
-      State.studentName = e.target.value;
-    });
-  }
+
+  document.getElementById('teacherPin').addEventListener('input', e => {
+    State.teacherPin = e.target.value;
+  });
+  document.getElementById('roomCode').addEventListener('input', e => {
+    State.roomId = e.target.value.toUpperCase();
+  });
+  document.getElementById('studentName').addEventListener('input', e => {
+    State.studentName = e.target.value;
+  });
+  document.getElementById('durationSelect').addEventListener('change', e => {
+    State.questionDuration = parseInt(e.target.value, 10);
+  });
 }
 
+// ---------------- Teacher ----------------
 function renderTeacher(container) {
-  const q = State.questions[State.currentQuestion];
-  const progress = ((State.currentQuestion + 1) / State.questions.length) * 100;
-  
+  const room = State.roomSnapshot;
+  const q = State.questions[State.currentQuestion] || State.questions[0];
+  const total = State.questions.length;
+  const progress = ((State.currentQuestion + 1) / total) * 100;
+
+  if (State.teacherMode === 'lobby') {
+    const joinUrl = window.location.origin + window.location.pathname + '?room=' + State.roomId;
+    const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=' + encodeURIComponent(joinUrl);
+    const students = room && room.students ? Object.values(room.students) : [];
+
+    container.innerHTML = `
+      <div class="header">
+        <h1>Lobby — Quiz Fiqh</h1>
+        <p>Donne le code ou le QR aux élèves puis lance le quiz quand tout le monde est là.</p>
+      </div>
+      <div class="content">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+          <div>
+            <p style="font-size:13px; color:#6b7280;">Code salle :</p>
+            <div class="room-code">${State.roomId}</div>
+          </div>
+          <div class="timer-badge">
+            ⏱ Durée par question : <span>${State.questionDuration}s</span>
+          </div>
+        </div>
+
+        <div class="lobby-grid">
+          <div class="lobby-panel">
+            <h3>Élèves connectés (${students.length})</h3>
+            <div class="student-list">
+              ${
+                students.length === 0
+                  ? '<p style="font-size:13px; color:#9ca3af;">En attente des élèves…</p>'
+                  : students.map(s => `<span class="student-chip">${s.name}</span>`).join('')
+              }
+            </div>
+          </div>
+          <div class="lobby-panel">
+            <h3>QR code à projeter</h3>
+            <div class="qr-wrapper">
+              <img src="${qrUrl}" alt="QR Code salle">
+              <div>Ou lien direct :</div>
+              <code style="font-size:11px;">${joinUrl}</code>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:24px; display:flex; gap:12px; flex-wrap:wrap;">
+          <button class="btn btn-primary" onclick="startQuiz()" ${students.length === 0 ? 'disabled' : ''}>
+            🚀 Lancer le quiz
+          </button>
+          <button class="btn btn-secondary" onclick="backToHome()">Quitter</button>
+        </div>
+
+        <div class="info">
+          <p>Les élèves qui rejoignent après le lancement arriveront automatiquement sur la question en cours.</p>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  // Mode quiz enseignant
   container.innerHTML = `
     <div class="quiz-header">
       <div class="quiz-info">
         <h2>Mode Enseignant</h2>
-        <p>Salle: <span class="room-code">${State.roomId}</span></p>
+        <p>Salle: <span class="room-code" style="font-size:18px;">${State.roomId}</span></p>
       </div>
       <div class="toolbar">
+        <div class="timer-badge">
+          ⏳ Temps restant : <span id="teacherTimer">${State.remainingTime !== null ? State.remainingTime : State.questionDuration}s</span>
+        </div>
+        <select id="durationSelectTeacher" style="padding:6px 10px; border-radius:999px; border:1px solid #d1d5db; font-size:12px;">
+          <option value="10" ${State.questionDuration===10?'selected':''}>10 s</option>
+          <option value="20" ${State.questionDuration===20?'selected':''}>20 s</option>
+          <option value="30" ${State.questionDuration===30?'selected':''}>30 s</option>
+        </select>
         <button class="btn btn-secondary btn-small" onclick="shuffleQuestions()">🔀 Mélanger</button>
         <button class="btn btn-secondary btn-small" onclick="showLeaderboard()">🏆 Classement</button>
         <button class="btn btn-secondary btn-small" onclick="backToHome()">Quitter</button>
       </div>
     </div>
-    
+
     <div class="progress-bar">
-      <div class="progress-fill" style="width: ${progress}%"></div>
+      <div class="progress-fill" style="width:${progress}%"></div>
     </div>
-    
+
     <div class="question-card">
-      <p style="text-align: center; font-size: 14px; font-weight: 600; margin-bottom: 8px; color: #6c757d;">
-        Question ${State.currentQuestion + 1}/${State.questions.length}
+      <p style="text-align:center;font-size:14px;font-weight:600;margin-bottom:8px;color:#6c757d;">
+        Question ${State.currentQuestion + 1}/${total}
       </p>
-      <p style="text-align: center; font-size: 13px; margin-bottom: 20px; color: #10b981; font-weight: 600;">
+      <p style="text-align:center;font-size:13px;margin-bottom:20px;color:#10b981;font-weight:600;">
         ✅ Bonne réponse: ${q.answers[q.correct]}
       </p>
-      
       <div class="question-text">${q.text}</div>
-      
       <div class="answers-grid">
         ${q.answers.map((answer, idx) => `
-          <div class="answer-btn ${idx === q.correct ? 'correct' : ''}" style="cursor: default;">
+          <div class="answer-btn ${idx === q.correct ? 'correct' : ''}" style="cursor:default;">
             <strong>${idx + 1}.</strong> ${answer}
           </div>
         `).join('')}
       </div>
-      
       <div class="controls">
         <button class="btn btn-secondary" onclick="prevQuestion()" ${State.currentQuestion === 0 ? 'disabled' : ''}>
           ← Précédent
         </button>
-        <button class="btn btn-primary" onclick="nextQuestion()" ${State.currentQuestion === State.questions.length - 1 ? 'disabled' : ''}>
+        <button class="btn btn-primary" onclick="nextQuestion()" ${State.currentQuestion === total - 1 ? 'disabled' : ''}>
           Suivant →
         </button>
       </div>
     </div>
   `;
+
+  const durationSelect = document.getElementById('durationSelectTeacher');
+  if (durationSelect) {
+    durationSelect.addEventListener('change', e => {
+      State.questionDuration = parseInt(e.target.value, 10);
+    });
+  }
 }
 
+// -------------- Student waiting --------------
+function renderStudentWaiting(container) {
+  container.innerHTML = `
+    <div class="header">
+      <h1>En attente du lancement…</h1>
+      <p>Salle: ${State.roomId}</p>
+    </div>
+    <div class="content" style="text-align:center;">
+      <p style="font-size:16px;margin-bottom:12px;">Bonjour <strong>${State.studentName}</strong> 👋</p>
+      <p style="font-size:14px;color:#6b7280;margin-bottom:20px;">
+        L'enseignant n'a pas encore lancé le quiz. Reste sur cette page, il démarrera automatiquement.
+      </p>
+      <div style="font-size:30px;">⏳</div>
+    </div>
+  `;
+}
+
+// -------------- Student quiz --------------
 function renderStudent(container) {
   const q = State.questions[State.currentQuestion];
-  const progress = ((State.currentQuestion + 1) / State.questions.length) * 100;
-  
+  const total = State.questions.length;
+  const progress = ((State.currentQuestion + 1) / total) * 100;
+
   container.innerHTML = `
     <div class="quiz-header">
       <div class="quiz-info">
@@ -770,18 +785,16 @@ function renderStudent(container) {
         <div class="label">points</div>
       </div>
     </div>
-    
+
     <div class="progress-bar">
-      <div class="progress-fill" style="width: ${progress}%"></div>
+      <div class="progress-fill" style="width:${progress}%"></div>
     </div>
-    
+
     <div class="question-card">
-      <p style="text-align: center; font-size: 14px; font-weight: 600; margin-bottom: 20px; color: #6c757d;">
-        Question ${State.currentQuestion + 1}/${State.questions.length}
+      <p style="text-align:center;font-size:14px;font-weight:600;margin-bottom:20px;color:#6c757d;">
+        Question ${State.currentQuestion + 1}/${total}
       </p>
-      
       <div class="question-text">${q.text}</div>
-      
       <div class="answers-grid">
         ${q.answers.map((answer, idx) => {
           let btnClass = 'answer-btn';
@@ -791,7 +804,6 @@ function renderStudent(container) {
           } else if (idx === State.selectedAnswer) {
             btnClass += ' selected';
           }
-          
           return `
             <button class="${btnClass}" onclick="submitAnswer(${idx})" ${State.hasAnswered ? 'disabled' : ''}>
               <strong>${idx + 1}.</strong> ${answer}
@@ -799,114 +811,68 @@ function renderStudent(container) {
           `;
         }).join('')}
       </div>
-      
       ${State.result ? `
         <div class="result-message ${State.result.correct ? 'success' : 'error'}">
           ${State.result.correct ? `✅ Bravo! +${State.result.points} points` : '❌ Mauvaise réponse'}
         </div>
       ` : ''}
-      
       ${State.error ? `<div class="error">${State.error}</div>` : ''}
     </div>
   `;
 }
 
-// ============================================
-// ACTION FUNCTIONS
-// ============================================
-
+// ============================
+// 6. ACTIONS ENSEIGNANT
+// ============================
 async function createRoom() {
   if (!State.teacherPin || State.teacherPin.length < 4) {
     State.error = "Le PIN doit contenir au moins 4 caractères";
     render();
     return;
   }
-  
   State.loading = true;
   State.error = '';
   render();
-  
+
   const result = await SecureBackend.createRoom(State.teacherPin, State.questions);
-  
   if (result.success) {
     State.roomId = result.roomId;
     State.mode = 'teacher';
+    State.teacherMode = 'lobby';
     State.currentQuestion = 0;
+    State.remainingTime = null;
+    await refreshTeacherRoom();
+    startTeacherPolling();
   } else {
     State.error = result.error || "Erreur de création";
   }
-  
   State.loading = false;
   render();
 }
 
-async function joinRoom() {
-  if (!State.roomId || !State.studentName) {
-    State.error = "Remplis tous les champs";
-    render();
-    return;
-  }
-  
-  State.loading = true;
-  State.error = '';
-  render();
-  
-  const result = await SecureBackend.joinRoom(State.roomId, State.studentName);
-  
-  if (result.success) {
-    State.studentId = result.studentId;
-    State.currentQuestion = result.currentQuestion;
-    State.mode = 'student';
-    State.startTime = Date.now();
-    startPolling();
-  } else {
-    State.error = result.error || "Erreur de connexion";
-  }
-  
-  State.loading = false;
-  render();
-}
-
-async function submitAnswer(answerIndex) {
-  if (State.hasAnswered) return;
-  
-  const timeSpent = Date.now() - State.startTime;
-  State.selectedAnswer = answerIndex;
-  State.hasAnswered = true;
-  render();
-  
-  const result = await SecureBackend.submitAnswer(
-    State.roomId,
-    State.studentId,
-    State.currentQuestion,
-    answerIndex,
-    timeSpent
-  );
-  
-  if (result.success) {
-    State.result = result;
-    State.score = result.totalScore;
-  } else if (result.alreadyAnswered) {
-    State.error = "Tu as déjà répondu à cette question";
-  }
-  
+async function startQuiz() {
+  State.teacherMode = 'quiz';
+  State.currentQuestion = 0;
+  await SecureBackend.startOrGoToQuestion(State.roomId, State.teacherPin, 0, State.questionDuration);
+  startQuestionTimer();
   render();
 }
 
 async function nextQuestion() {
-  if (State.currentQuestion < State.questions.length - 1) {
-    const newIndex = State.currentQuestion + 1;
-    await SecureBackend.updateCurrentQuestion(State.roomId, State.teacherPin, newIndex);
-    State.currentQuestion = newIndex;
+  const total = State.questions.length;
+  if (State.currentQuestion < total - 1) {
+    State.currentQuestion += 1;
+    await SecureBackend.startOrGoToQuestion(State.roomId, State.teacherPin, State.currentQuestion, State.questionDuration);
+    startQuestionTimer();
     render();
   }
 }
 
 async function prevQuestion() {
   if (State.currentQuestion > 0) {
-    const newIndex = State.currentQuestion - 1;
-    await SecureBackend.updateCurrentQuestion(State.roomId, State.teacherPin, newIndex);
-    State.currentQuestion = newIndex;
+    State.currentQuestion -= 1;
+    await SecureBackend.startOrGoToQuestion(State.roomId, State.teacherPin, State.currentQuestion, State.questionDuration);
+    startQuestionTimer();
     render();
   }
 }
@@ -917,21 +883,77 @@ function shuffleQuestions() {
     [State.questions[i], State.questions[j]] = [State.questions[j], State.questions[i]];
   }
   State.currentQuestion = 0;
+  if (State.mode === 'teacher' && State.teacherMode === 'quiz') {
+    SecureBackend.startOrGoToQuestion(State.roomId, State.teacherPin, 0, State.questionDuration);
+    startQuestionTimer();
+  }
   render();
+}
+
+async function refreshTeacherRoom() {
+  const room = await SecureBackend.getRoom(State.roomId);
+  State.roomSnapshot = room;
+}
+
+function startTeacherPolling() {
+  stopTeacherPolling();
+  State.teacherPollInterval = setInterval(async () => {
+    await refreshTeacherRoom();
+    if (State.mode === 'teacher') render();
+  }, 2000);
+}
+
+function stopTeacherPolling() {
+  if (State.teacherPollInterval) {
+    clearInterval(State.teacherPollInterval);
+    State.teacherPollInterval = null;
+  }
+}
+
+// Timer côté enseignant
+function startQuestionTimer() {
+  stopQuestionTimer();
+  State.remainingTime = State.questionDuration;
+  State.timerInterval = setInterval(() => {
+    if (State.remainingTime === null) return;
+    State.remainingTime -= 1;
+    const timerEl = document.getElementById('teacherTimer');
+    if (timerEl) timerEl.textContent = State.remainingTime + 's';
+    if (State.remainingTime <= 0) {
+      stopQuestionTimer();
+      autoAdvanceAfterTimer();
+    }
+  }, 1000);
+}
+
+function stopQuestionTimer() {
+  if (State.timerInterval) {
+    clearInterval(State.timerInterval);
+    State.timerInterval = null;
+  }
+}
+
+async function autoAdvanceAfterTimer() {
+  const total = State.questions.length;
+  if (State.currentQuestion < total - 1) {
+    await nextQuestion();
+  } else {
+    // fin de quiz
+    State.teacherMode = 'quiz';
+    render();
+  }
 }
 
 async function showLeaderboard() {
   const leaderboard = await SecureBackend.getLeaderboard(State.roomId);
   const modal = document.getElementById('leaderboardModal');
   const content = document.getElementById('leaderboardContent');
-  
-  content.innerHTML = leaderboard.map((student, idx) => `
+  content.innerHTML = leaderboard.map((s, idx) => `
     <div class="leaderboard-item">
-      <span class="name">${idx + 1}. ${student.name}</span>
-      <span class="score">${student.score}</span>
+      <span class="name">${idx + 1}. ${s.name}</span>
+      <span class="score">${s.score}</span>
     </div>
   `).join('');
-  
   modal.classList.add('active');
 }
 
@@ -941,32 +963,105 @@ function closeLeaderboard() {
 
 function backToHome() {
   stopPolling();
-  State.mode = 'home';
-  State.roomId = '';
-  State.teacherPin = '';
-  State.studentName = '';
-  State.studentId = '';
-  State.currentQuestion = 0;
-  State.hasAnswered = false;
-  State.selectedAnswer = null;
-  State.result = null;
-  State.score = 0;
-  State.error = '';
+  stopTeacherPolling();
+  stopQuestionTimer();
+  Object.assign(State, {
+    mode: 'home',
+    teacherMode: 'lobby',
+    roomId: '',
+    teacherPin: '',
+    studentName: '',
+    studentId: '',
+    currentQuestion: 0,
+    hasAnswered: false,
+    selectedAnswer: null,
+    result: null,
+    score: 0,
+    error: '',
+    roomSnapshot: null,
+    remainingTime: null
+  });
   render();
 }
 
+// ============================
+// 7. ACTIONS ÉLÈVE
+// ============================
+async function joinRoom() {
+  if (!State.roomId || !State.studentName) {
+    State.error = "Remplis tous les champs";
+    render();
+    return;
+  }
+  State.loading = true;
+  State.error = '';
+  render();
+
+  const result = await SecureBackend.joinRoom(State.roomId, State.studentName);
+  if (result.success) {
+    State.studentId = result.studentId;
+    State.currentQuestion = result.currentQuestion ?? 0;
+    if (result.status === 'running' && result.currentQuestion !== null) {
+      State.mode = 'student';
+      State.startTime = Date.now();
+      startPolling();
+    } else {
+      State.mode = 'studentWaiting';
+      startPolling();
+    }
+  } else {
+    State.error = result.error || "Erreur de connexion";
+  }
+  State.loading = false;
+  render();
+}
+
+async function submitAnswer(answerIndex) {
+  if (State.hasAnswered) return;
+  const timeSpent = Date.now() - State.startTime;
+  State.selectedAnswer = answerIndex;
+  State.hasAnswered = true;
+  render();
+
+  const result = await SecureBackend.submitAnswer(
+    State.roomId,
+    State.studentId,
+    State.currentQuestion,
+    answerIndex,
+    timeSpent
+  );
+  if (result.success) {
+    State.result = result;
+    State.score = result.totalScore;
+  } else if (result.alreadyAnswered) {
+    State.error = "Tu as déjà répondu à cette question";
+  }
+  render();
+}
+
+// polling élève pour suivre la question en cours
 function startPolling() {
   stopPolling();
   State.pollInterval = setInterval(async () => {
     const room = await SecureBackend.getRoom(State.roomId);
-    if (room && room.currentQuestion !== State.currentQuestion) {
+    if (!room) return;
+    if (room.status === 'running' && State.mode === 'studentWaiting') {
+      State.mode = 'student';
+      State.currentQuestion = room.currentQuestion ?? 0;
+      State.hasAnswered = false;
+      State.selectedAnswer = null;
+      State.result = null;
+      State.startTime = Date.now();
+      render();
+      return;
+    }
+    if (room.currentQuestion !== null && room.currentQuestion !== State.currentQuestion) {
       State.currentQuestion = room.currentQuestion;
       State.hasAnswered = false;
       State.selectedAnswer = null;
       State.result = null;
       State.startTime = Date.now();
-      State.error = '';
-      render();
+      if (State.mode === 'student') render();
     }
   }, 2000);
 }
@@ -978,6 +1073,7 @@ function stopPolling() {
   }
 }
 
+// Démarrage initial
 render();
 </script>
 
