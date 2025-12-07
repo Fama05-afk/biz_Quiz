@@ -947,7 +947,7 @@ function renderTeacher(container) {
       <div class="question-text">${q.text}</div>
       <div class="answers-grid">
         ${q.answers.map((answer, idx) => `
-          <div class="answer-btn ${idx === q.correct ? 'correct' : ''}" style="cursor:default;">
+          <div class="answer-btn" style="cursor:default;">
             <strong>${idx + 1}.</strong> ${answer}
           </div>
         `).join('')}
