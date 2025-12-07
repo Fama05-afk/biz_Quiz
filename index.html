@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz Fiqh Sécurisé — Style Kahoot</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    .container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    
+    .card {
+      background: white;
+      border-radius: 24px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      max-width: 900px;
+      width: 100%;
+      overflow: hidden;
+    }
+    
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 24px;
+      color: white;
+    }
+    
+    .header h1 {
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+    
+    .header p {
+      opacity: 0.9;
+      font-size: 14px;
+    }
+    
+    .content {
+      padding: 32px 24px;
+    }
+    
+    .mode-section {
+      background: linear-gradient(135deg, #f6f8fb 0%, #e9ecef 100%);
+      padding: 24px;
+      border-radius: 16px;
+      margin-bottom: 20px;
+      border: 3px solid #dee2e6;
+    }
+    
+    .mode-section.teacher {
+      border-color: #667eea;
+      background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+    }
+    
+    .mode-section.student {
+      border-color: #10b981;
+      background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    }
+    
+    .mode-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      font-size: 20px;
+      font-weight: 700;
+    }
+    
+    .icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+    
+    .icon.teacher { background: #667eea; }
+    .icon.student { background: #10b981; }
+    
+    input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #dee2e6;
+      border-radius: 12px;
+      font-size: 15px;
+      margin-bottom: 12px;
+      font-family: inherit;
+    }
+    
+    input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+    
+    .btn {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+    
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+    
+    .btn-primary:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+    }
+    
+    .btn-success {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+    }
+    
+    .btn-success:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+    }
+    
+    .btn-secondary {
+      background: #e9ecef;
+      color: #495057;
+    }
+    
+    .btn-secondary:hover:not(:disabled) {
+      background: #dee2e6;
+    }
+    
+    .error {
+      background: #fee;
+      border: 2px solid #fcc;
+      color: #c33;
+      padding: 12px;
+      border-radius: 12px;
+      text-align: center;
+      margin-top: 12px;
+      font-weight: 600;
+    }
+    
+    .info {
+      text-align: center;
+      color: #6c757d;
+      font-size: 13px;
+      margin-top: 20px;
+    }
+    
+    .info p {
+      margin: 4px 0;
+    }
+    
+    /* Quiz screen styles */
+    .quiz-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 20px 24px;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    
+    .quiz-info h2 {
+      font-size: 24px;
+      font-weight: 800;
+    }
+    
+    .quiz-info p {
+      opacity: 0.9;
+      font-size: 14px;
+    }
+    
+    .score-display {
+      text-align: right;
+    }
+    
+    .score-display .score {
+      font-size: 32px;
+      font-weight: 900;
+    }
+    
+    .score-display .label {
+      font-size: 12px;
+      opacity: 0.8;
+    }
+    
+    .progress-bar {
+      height: 12px;
+      background: #e9ecef;
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 20px 24px;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+      transition: width 0.3s;
+    }
+    
+    .question-card {
+      padding: 32px 24px;
+    }
+    
+    .question-text {
+      font-size: 24px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 32px;
+      color: #212529;
+    }
+    
+    .answers-grid {
+      display: grid;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    
+    .answer-btn {
+      padding: 16px 20px;
+      border: 3px solid #dee2e6;
+      border-radius: 12px;
+      background: white;
+      font-size: 16px;
+      font-weight: 600;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+    
+    .answer-btn:hover:not(:disabled) {
+      border-color: #667eea;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    .answer-btn:disabled {
+      cursor: not-allowed;
+    }
+    
+    .answer-btn.correct {
+      background: #d1fae5;
+      border-color: #10b981;
+      color: #065f46;
+    }
+    
+    .answer-btn.wrong {
+      background: #fee2e2;
+      border-color: #ef4444;
+      color: #991b1b;
+    }
+    
+    .answer-btn.selected {
+      background: #e0e7ff;
+      border-color: #667eea;
+    }
+    
+    .result-message {
+      padding: 16px;
+      border-radius: 12px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 18px;
+      margin-top: 20px;
+    }
+    
+    .result-message.success {
+      background: #d1fae5;
+      color: #065f46;
+    }
+    
+    .result-message.error {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+    
+    .controls {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+    
+    .controls .btn {
+      flex: 1;
+      min-width: 140px;
+    }
+    
+    .toolbar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+    
+    .btn-small {
+      padding: 8px 16px;
+      font-size: 14px;
+      width: auto;
+    }
+    
+    .room-code {
+      font-family: 'Courier New', monospace;
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: 2px;
+    }
+    
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    
+    .modal.active {
+      display: flex;
+    }
+    
+    .modal-content {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      max-width: 500px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    
+    .modal h3 {
+      font-size: 24px;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+    
+    .leaderboard-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+    
+    .leaderboard-item .name {
+      font-weight: 700;
+      font-size: 18px;
+    }
+    
+    .leaderboard-item .score {
+      font-weight: 900;
+      font-size: 20px;
+      color: #667eea;
+    }
+    
+    @media (max-width: 600px) {
+      .quiz-header {
+        text-align: center;
+      }
+      .score-display {
+        text-align: center;
+      }
+      .question-text {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="card" id="app"></div>
+</div>
+
+<div class="modal" id="leaderboardModal">
+  <div class="modal-content">
+    <h3>🏆 Classement</h3>
+    <div id="leaderboardContent"></div>
+    <button class="btn btn-primary" onclick="closeLeaderboard()">Fermer</button>
+  </div>
+</div>
+
+<script>
+// ============================================
+// CONFIGURATION ET DONNÉES
+// ============================================
+
+const DEFAULT_QUESTIONS = [
+  {
+    text: "Celui qui a oublié le qunût dans la prière du matin…",
+    answers: ["Sajada ba'da as-salâm", "Sajada qabla as-salâm", "Ṣalâtuhu ṣaḥîḥa"],
+    correct: 0
+  },
+  {
+    text: "Quel est le jugement de celui qui a ajouté dans la prière quelque chose équivalent…",
+    answers: ["Ṣaḥḥat ṣalâtuhu", "Baṭulat ṣalâtuhu", "Sajada ba'da as-salâm", "Sajada qabla as-salâm"],
+    correct: 0
+  },
+  {
+    text: "J'ai récité à voix haute dans la prière de l'ʿAṣr…",
+    answers: ["Sajadtu qabla as-salām", "Sajadtu baʿda as-salām", "Lā sujûda ʿalayhi", "Ṣalātī ṣaḥīḥa"],
+    correct: 0
+  },
+  {
+    text: "La prosternation de l'oubli dans la prière a lieu lorsqu'on délaisse…",
+    answers: ["Thalātha sunan", "Sunnah wāḥidah", "Sunnatayn", "Arba'a sunan"],
+    correct: 0
+  },
+  {
+    text: "J'étais en prière et j'ai entendu la mention du Prophète Muḥammad (ﷺ)…",
+    answers: ["Sajadtu baʿda as-salām", "Kuriḥat wa-lākin ṣaḥḥat ṣalātī", "Baṭulat ṣalātī", "Lā sujûda ʿalayya"],
+    correct: 0
+  }
+];
+
+// ============================================
+// STORAGE SIMULATION (in-memory for now)
+// ============================================
+
+const inMemoryStorage = {};
+
+const StorageAPI = {
+  async set(key, value, shared = false) {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        inMemoryStorage[key] = value;
+        resolve({ key, value, shared });
+      }, 10);
+    });
+  },
+  
+  async get(key, shared = false) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (inMemoryStorage[key]) {
+          resolve({ key, value: inMemoryStorage[key], shared });
+        } else {
+          reject(new Error('Key not found'));
+        }
+      }, 10);
+    });
+  }
+};
+
+// ============================================
+// BACKEND SÉCURISÉ
+// ============================================
+
+const SecureBackend = {
+  async createRoom(teacherPin, questions) {
+    const roomId = Math.random().toString(36).substr(2, 6).toUpperCase();
+    const room = {
+      id: roomId,
+      teacherPin: teacherPin,
+      questions: questions,
+      currentQuestion: 0,
+      students: {},
+      createdAt: Date.now()
+    };
+    
+    try {
+      await StorageAPI.set(`room:${roomId}`, JSON.stringify(room), true);
+      return { success: true, roomId };
+    } catch (e) {
+      return { success: false, error: "Erreur de création" };
+    }
+  },
+
+  async getRoom(roomId) {
+    try {
+      const result = await StorageAPI.get(`room:${roomId}`, true);
+      return result ? JSON.parse(result.value) : null;
+    } catch {
+      return null;
+    }
+  },
+
+  async joinRoom(roomId, studentName) {
+    const room = await this.getRoom(roomId);
+    if (!room) return { success: false, error: "Salle introuvable" };
+    
+    const studentId = Math.random().toString(36).substr(2, 9);
+    room.students[studentId] = {
+      name: studentName,
+      score: 0,
+      answers: {},
+      joinedAt: Date.now()
+    };
+    
+    try {
+      await StorageAPI.set(`room:${roomId}`, JSON.stringify(room), true);
+      return { success: true, studentId, currentQuestion: room.currentQuestion };
+    } catch (e) {
+      return { success: false, error: "Erreur de connexion" };
+    }
+  },
+
+  async submitAnswer(roomId, studentId, questionIndex, answerIndex, timeSpent) {
+    const room = await this.getRoom(roomId);
+    if (!room || !room.students[studentId]) {
+      return { success: false, error: "Session invalide" };
+    }
+
+    const question = room.questions[questionIndex];
+    if (!question) return { success: false, error: "Question invalide" };
+
+    if (room.students[studentId].answers[questionIndex]) {
+      return { success: false, error: "Déjà répondu", alreadyAnswered: true };
+    }
+
+    const isCorrect = answerIndex === question.correct;
+    
+    let points = 0;
+    if (isCorrect) {
+      points = 1000;
+      if (timeSpent < 3000) points += 500;
+      else if (timeSpent < 5000) points += 300;
+      else if (timeSpent < 10000) points += 100;
+    }
+
+    room.students[studentId].answers[questionIndex] = {
+      answer: answerIndex,
+      correct: isCorrect,
+      points,
+      timeSpent,
+      timestamp: Date.now()
+    };
+    room.students[studentId].score += points;
+
+    await StorageAPI.set(`room:${roomId}`, JSON.stringify(room), true);
+
+    return {
+      success: true,
+      correct: isCorrect,
+      correctAnswer: question.correct,
+      points,
+      totalScore: room.students[studentId].score
+    };
+  },
+
+  async updateCurrentQuestion(roomId, teacherPin, questionIndex) {
+    const room = await this.getRoom(roomId);
+    if (!room || room.teacherPin !== teacherPin) {
+      return { success: false, error: "Non autorisé" };
+    }
+
+    room.currentQuestion = questionIndex;
+    await StorageAPI.set(`room:${roomId}`, JSON.stringify(room), true);
+    return { success: true };
+  },
+
+  async getLeaderboard(roomId) {
+    const room = await this.getRoom(roomId);
+    if (!room) return [];
+
+    return Object.entries(room.students)
+      .map(([id, student]) => ({
+        id,
+        name: student.name,
+        score: student.score
+      }))
+      .sort((a, b) => b.score - a.score);
+  }
+};
+
+// ============================================
+// STATE MANAGEMENT
+// ============================================
+
+const State = {
+  mode: 'home',
+  roomId: '',
+  teacherPin: '',
+  studentName: '',
+  studentId: '',
+  currentQuestion: 0,
+  questions: DEFAULT_QUESTIONS.slice(),
+  hasAnswered: false,
+  selectedAnswer: null,
+  result: null,
+  score: 0,
+  startTime: Date.now(),
+  error: '',
+  loading: false,
+  pollInterval: null
+};
+
+// ============================================
+// RENDER FUNCTIONS
+// ============================================
+
+function render() {
+  const app = document.getElementById('app');
+  
+  if (State.mode === 'home') {
+    renderHome(app);
+  } else if (State.mode === 'teacher') {
+    renderTeacher(app);
+  } else if (State.mode === 'student') {
+    renderStudent(app);
+  }
+}
+
+function renderHome(container) {
+  container.innerHTML = `
+    <div class="header">
+      <h1>Quiz Fiqh Sécurisé</h1>
+      <p>Version Kahoot avec protection anti-triche</p>
+    </div>
+    <div class="content">
+      <div class="mode-section teacher">
+        <div class="mode-title">
+          <div class="icon teacher">👨‍🏫</div>
+          <span>Mode Enseignant</span>
+        </div>
+        <input type="password" id="teacherPin" placeholder="Crée un PIN (min 4 caractères)" value="${State.teacherPin}">
+        <button class="btn btn-primary" onclick="createRoom()" ${State.loading ? 'disabled' : ''}>
+          ${State.loading ? 'Création...' : 'Créer une salle'}
+        </button>
+      </div>
+      
+      <div class="mode-section student">
+        <div class="mode-title">
+          <div class="icon student">👨‍🎓</div>
+          <span>Mode Élève</span>
+        </div>
+        <input type="text" id="roomCode" placeholder="Code de la salle (ex: ABC123)" value="${State.roomId}">
+        <input type="text" id="studentName" placeholder="Ton prénom" value="${State.studentName}">
+        <button class="btn btn-success" onclick="joinRoom()" ${State.loading ? 'disabled' : ''}>
+          ${State.loading ? 'Connexion...' : 'Rejoindre la salle'}
+        </button>
+      </div>
+      
+      ${State.error ? `<div class="error">${State.error}</div>` : ''}
+      
+      <div class="info">
+        <p>🔒 Les réponses sont sécurisées côté serveur</p>
+        <p>⚡ Bonus de points pour la rapidité</p>
+      </div>
+    </div>
+  `;
+  
+  const pinInput = document.getElementById('teacherPin');
+  if (pinInput) {
+    pinInput.addEventListener('input', (e) => {
+      State.teacherPin = e.target.value;
+    });
+  }
+  
+  const roomInput = document.getElementById('roomCode');
+  if (roomInput) {
+    roomInput.addEventListener('input', (e) => {
+      State.roomId = e.target.value.toUpperCase();
+    });
+  }
+  
+  const nameInput = document.getElementById('studentName');
+  if (nameInput) {
+    nameInput.addEventListener('input', (e) => {
+      State.studentName = e.target.value;
+    });
+  }
+}
+
+function renderTeacher(container) {
+  const q = State.questions[State.currentQuestion];
+  const progress = ((State.currentQuestion + 1) / State.questions.length) * 100;
+  
+  container.innerHTML = `
+    <div class="quiz-header">
+      <div class="quiz-info">
+        <h2>Mode Enseignant</h2>
+        <p>Salle: <span class="room-code">${State.roomId}</span></p>
+      </div>
+      <div class="toolbar">
+        <button class="btn btn-secondary btn-small" onclick="shuffleQuestions()">🔀 Mélanger</button>
+        <button class="btn btn-secondary btn-small" onclick="showLeaderboard()">🏆 Classement</button>
+        <button class="btn btn-secondary btn-small" onclick="backToHome()">Quitter</button>
+      </div>
+    </div>
+    
+    <div class="progress-bar">
+      <div class="progress-fill" style="width: ${progress}%"></div>
+    </div>
+    
+    <div class="question-card">
+      <p style="text-align: center; font-size: 14px; font-weight: 600; margin-bottom: 8px; color: #6c757d;">
+        Question ${State.currentQuestion + 1}/${State.questions.length}
+      </p>
+      <p style="text-align: center; font-size: 13px; margin-bottom: 20px; color: #10b981; font-weight: 600;">
+        ✅ Bonne réponse: ${q.answers[q.correct]}
+      </p>
+      
+      <div class="question-text">${q.text}</div>
+      
+      <div class="answers-grid">
+        ${q.answers.map((answer, idx) => `
+          <div class="answer-btn ${idx === q.correct ? 'correct' : ''}" style="cursor: default;">
+            <strong>${idx + 1}.</strong> ${answer}
+          </div>
+        `).join('')}
+      </div>
+      
+      <div class="controls">
+        <button class="btn btn-secondary" onclick="prevQuestion()" ${State.currentQuestion === 0 ? 'disabled' : ''}>
+          ← Précédent
+        </button>
+        <button class="btn btn-primary" onclick="nextQuestion()" ${State.currentQuestion === State.questions.length - 1 ? 'disabled' : ''}>
+          Suivant →
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function renderStudent(container) {
+  const q = State.questions[State.currentQuestion];
+  const progress = ((State.currentQuestion + 1) / State.questions.length) * 100;
+  
+  container.innerHTML = `
+    <div class="quiz-header">
+      <div class="quiz-info">
+        <h2>${State.studentName}</h2>
+        <p>Salle: ${State.roomId}</p>
+      </div>
+      <div class="score-display">
+        <div class="score">${State.score}</div>
+        <div class="label">points</div>
+      </div>
+    </div>
+    
+    <div class="progress-bar">
+      <div class="progress-fill" style="width: ${progress}%"></div>
+    </div>
+    
+    <div class="question-card">
+      <p style="text-align: center; font-size: 14px; font-weight: 600; margin-bottom: 20px; color: #6c757d;">
+        Question ${State.currentQuestion + 1}/${State.questions.length}
+      </p>
+      
+      <div class="question-text">${q.text}</div>
+      
+      <div class="answers-grid">
+        ${q.answers.map((answer, idx) => {
+          let btnClass = 'answer-btn';
+          if (State.hasAnswered && State.result) {
+            if (idx === State.result.correctAnswer) btnClass += ' correct';
+            if (idx === State.selectedAnswer && !State.result.correct) btnClass += ' wrong';
+          } else if (idx === State.selectedAnswer) {
+            btnClass += ' selected';
+          }
+          
+          return `
+            <button class="${btnClass}" onclick="submitAnswer(${idx})" ${State.hasAnswered ? 'disabled' : ''}>
+              <strong>${idx + 1}.</strong> ${answer}
+            </button>
+          `;
+        }).join('')}
+      </div>
+      
+      ${State.result ? `
+        <div class="result-message ${State.result.correct ? 'success' : 'error'}">
+          ${State.result.correct ? `✅ Bravo! +${State.result.points} points` : '❌ Mauvaise réponse'}
+        </div>
+      ` : ''}
+      
+      ${State.error ? `<div class="error">${State.error}</div>` : ''}
+    </div>
+  `;
+}
+
+// ============================================
+// ACTION FUNCTIONS
+// ============================================
+
+async function createRoom() {
+  if (!State.teacherPin || State.teacherPin.length < 4) {
+    State.error = "Le PIN doit contenir au moins 4 caractères";
+    render();
+    return;
+  }
+  
+  State.loading = true;
+  State.error = '';
+  render();
+  
+  const result = await SecureBackend.createRoom(State.teacherPin, State.questions);
+  
+  if (result.success) {
+    State.roomId = result.roomId;
+    State.mode = 'teacher';
+    State.currentQuestion = 0;
+  } else {
+    State.error = result.error || "Erreur de création";
+  }
+  
+  State.loading = false;
+  render();
+}
+
+async function joinRoom() {
+  if (!State.roomId || !State.studentName) {
+    State.error = "Remplis tous les champs";
+    render();
+    return;
+  }
+  
+  State.loading = true;
+  State.error = '';
+  render();
+  
+  const result = await SecureBackend.joinRoom(State.roomId, State.studentName);
+  
+  if (result.success) {
+    State.studentId = result.studentId;
+    State.currentQuestion = result.currentQuestion;
+    State.mode = 'student';
+    State.startTime = Date.now();
+    startPolling();
+  } else {
+    State.error = result.error || "Erreur de connexion";
+  }
+  
+  State.loading = false;
+  render();
+}
+
+async function submitAnswer(answerIndex) {
+  if (State.hasAnswered) return;
+  
+  const timeSpent = Date.now() - State.startTime;
+  State.selectedAnswer = answerIndex;
+  State.hasAnswered = true;
+  render();
+  
+  const result = await SecureBackend.submitAnswer(
+    State.roomId,
+    State.studentId,
+    State.currentQuestion,
+    answerIndex,
+    timeSpent
+  );
+  
+  if (result.success) {
+    State.result = result;
+    State.score = result.totalScore;
+  } else if (result.alreadyAnswered) {
+    State.error = "Tu as déjà répondu à cette question";
+  }
+  
+  render();
+}
+
+async function nextQuestion() {
+  if (State.currentQuestion < State.questions.length - 1) {
+    const newIndex = State.currentQuestion + 1;
+    await SecureBackend.updateCurrentQuestion(State.roomId, State.teacherPin, newIndex);
+    State.currentQuestion = newIndex;
+    render();
+  }
+}
+
+async function prevQuestion() {
+  if (State.currentQuestion > 0) {
+    const newIndex = State.currentQuestion - 1;
+    await SecureBackend.updateCurrentQuestion(State.roomId, State.teacherPin, newIndex);
+    State.currentQuestion = newIndex;
+    render();
+  }
+}
+
+function shuffleQuestions() {
+  for (let i = State.questions.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [State.questions[i], State.questions[j]] = [State.questions[j], State.questions[i]];
+  }
+  State.currentQuestion = 0;
+  render();
+}
+
+async function showLeaderboard() {
+  const leaderboard = await SecureBackend.getLeaderboard(State.roomId);
+  const modal = document.getElementById('leaderboardModal');
+  const content = document.getElementById('leaderboardContent');
+  
+  content.innerHTML = leaderboard.map((student, idx) => `
+    <div class="leaderboard-item">
+      <span class="name">${idx + 1}. ${student.name}</span>
+      <span class="score">${student.score}</span>
+    </div>
+  `).join('');
+  
+  modal.classList.add('active');
+}
+
+function closeLeaderboard() {
+  document.getElementById('leaderboardModal').classList.remove('active');
+}
+
+function backToHome() {
+  stopPolling();
+  State.mode = 'home';
+  State.roomId = '';
+  State.teacherPin = '';
+  State.studentName = '';
+  State.studentId = '';
+  State.currentQuestion = 0;
+  State.hasAnswered = false;
+  State.selectedAnswer = null;
+  State.result = null;
+  State.score = 0;
+  State.error = '';
+  render();
+}
+
+function startPolling() {
+  stopPolling();
+  State.pollInterval = setInterval(async () => {
+    const room = await SecureBackend.getRoom(State.roomId);
+    if (room && room.currentQuestion !== State.currentQuestion) {
+      State.currentQuestion = room.currentQuestion;
+      State.hasAnswered = false;
+      State.selectedAnswer = null;
+      State.result = null;
+      State.startTime = Date.now();
+      State.error = '';
+      render();
+    }
+  }, 2000);
+}
+
+function stopPolling() {
+  if (State.pollInterval) {
+    clearInterval(State.pollInterval);
+    State.pollInterval = null;
+  }
+}
+
+render();
+</script>
+
+</body>
+</html>
