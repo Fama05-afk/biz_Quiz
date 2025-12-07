@@ -606,8 +606,8 @@ function renderHome(container) {
 
   container.innerHTML = `
     <div class="header">
-      <h1>Quiz Fiqh Sécurisé</h1>
-      <p>Mini-Kahoot multi-appareils avec Firebase</p>
+      <h1>Quiz Fiqh </h1>
+      <p></p>
     </div>
     <div class="content">
       <div class="mode-section teacher">
@@ -619,9 +619,9 @@ function renderHome(container) {
         <div style="display:flex; gap:8px; align-items:center; margin-bottom:12px;">
           <label style="font-size:13px; color:#4b5563;">Durée par question :</label>
           <select id="durationSelect" style="flex:1; padding:8px 10px; border-radius:10px; border:1px solid #d1d5db;">
-            <option value="10" ${State.questionDuration===10?'selected':''}>10 s</option>
-            <option value="20" ${State.questionDuration===20?'selected':''}>20 s</option>
-            <option value="30" ${State.questionDuration===30?'selected':''}>30 s</option>
+            <option value="10" ${State.questionDuration===30?'selected':''}>10 s</option>
+            <option value="20" ${State.questionDuration===45?'selected':''}>20 s</option>
+            <option value="30" ${State.questionDuration===60?'selected':''}>30 s</option>
           </select>
         </div>
         <button class="btn btn-primary" onclick="createRoom()" ${State.loading ? 'disabled' : ''}>
@@ -644,8 +644,8 @@ function renderHome(container) {
       ${State.error ? `<div class="error">${State.error}</div>` : ''}
       
       <div class="info">
-        <p>🔐 Le PIN sert juste à empêcher un élève d’appuyer sur “Suivant” à ta place.</p>
-        <p>📱 Le QR code permet aux élèves de rejoindre facilement avec leur téléphone.</p>
+        <p>.</p>
+        <p>.</p>
       </div>
     </div>
   `;
