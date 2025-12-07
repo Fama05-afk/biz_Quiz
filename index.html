@@ -390,7 +390,7 @@ const DEFAULT_QUESTIONS = [
        <small>(Sa prière reste valide)</small><br>
        <span class="translit">(ṣalātuhu ṣaḥīḥa)</span>`
     ],
-    correct: 0
+    correct: 1
   },
   {
     text: `
@@ -399,9 +399,6 @@ const DEFAULT_QUESTIONS = [
       <span class="translit">(mā ḥukmu man zāda fī ṣ-ṣalāti miṯlahā?)</span>
     `,
     answers: [
-      `صحت صلاته<br>
-       <small>(Sa prière est valide)</small><br>
-       <span class="translit">(ṣaḥḥat ṣalātuhu)</span>`,
       `بطلت صلاته<br>
        <small>(Sa prière est annulée)</small><br>
        <span class="translit">(baṭulat ṣalātuhu)</span>`,
@@ -410,9 +407,12 @@ const DEFAULT_QUESTIONS = [
        <span class="translit">(sajada baʿda as-salām)</span>`,
       `سجد قبل السلام<br>
        <small>(Il fait la prosternation avant le salām)</small><br>
-       <span class="translit">(sajada qabla as-salām)</span>`
+       <span class="translit">(sajada qabla as-salām)</span>`,
+      `صحت صلاته<br>
+       <small>(Sa prière est valide)</small><br>
+       <span class="translit">(ṣaḥḥat ṣalātuhu)</span>`,
     ],
-    correct: 1
+    correct: 3
   },
   {
     text: `
@@ -421,43 +421,22 @@ const DEFAULT_QUESTIONS = [
       <span class="translit">(qaraʾtu jahran fī ṣalāti l-ʿaṣr)</span>
     `,
     answers: [
-      `سجدت قبل السلام<br>
-       <small>(J’ai fait la prosternation avant le salām)</small><br>
-       <span class="translit">(sajadtu qabla as-salām)</span>`,
       `سجدت بعد السلام<br>
        <small>(J’ai fait la prosternation après le salām)</small><br>
        <span class="translit">(sajadtu baʿda as-salām)</span>`,
       `لا سجود عليه<br>
        <small>(Aucune prosternation pour lui)</small><br>
        <span class="translit">(lā sujūda ʿalayhi)</span>`,
+      `سجدت قبل السلام<br>
+       <small>(J’ai fait la prosternation avant le salām)</small><br>
+       <span class="translit">(sajadtu qabla as-salām)</span>`,
       `صلاتي صحيحة<br>
        <small>(Ma prière est valide)</small><br>
        <span class="translit">(ṣalātī ṣaḥīḥa)</span>`
     ],
-    correct: 0
+    correct: 2
   },
-  {
-    text: `
-      يكون سجود السهو في الصلاة بترك…<br>
-      <small>(La prosternation d’oubli est due lorsqu’on délaisse…)</small><br>
-      <span class="translit">(yakūnu sujūdu s-sahwi fī ṣ-ṣalāti bitarki…)</span>
-    `,
-    answers: [
-      `ثلاث سنن<br>
-       <small>(Trois sunnahs)</small><br>
-       <span class="translit">(ṯalāṯa sunan)</span>`,
-      `سنة واحدة<br>
-       <small>(Une seule sunnah)</small><br>
-       <span class="translit">(sunnatun wāḥida)</span>`,
-      `سنتين<br>
-       <small>(Deux sunnahs)</small><br>
-       <span class="translit">(sunnatayn)</span>`,
-      `أربع سنن<br>
-       <small>(Quatre sunnahs)</small><br>
-       <span class="translit">(arbaʿa sunan)</span>`
-    ],
-    correct: 0
-  },
+ 
   {
     text: `
       كنت أصلي فسمعت ذكر النبي ﷺ فصليت عليه:<br>
@@ -478,7 +457,7 @@ const DEFAULT_QUESTIONS = [
        <small>(Aucune prosternation pour moi)</small><br>
        <span class="translit">(lā sujūda ʿalayya)</span>`
     ],
-    correct: 1
+    correct: 0
   },
   {
     text: `
@@ -487,53 +466,20 @@ const DEFAULT_QUESTIONS = [
       <span class="translit">(mā ḥukmu man qāma fī r-rakʿati ṯ-ṯāniya wa-tadhakkara qabla mufāraqat al-arḍ?)</span>
     `,
     answers: [
-      `يرجع إلى الجلوس<br>
-       <small>(Il retourne s’asseoir)</small><br>
-       <span class="translit">(yarjiʿu ilā l-julūs)</span>`,
       `يسجد بعد السلام<br>
        <small>(Il fait la prosternation après le salām)</small><br>
        <span class="translit">(yasjudu baʿda as-salām)</span>`,
       `لا يسجد<br>
        <small>(Il ne fait pas de prosternation)</small><br>
-       <span class="translit">(lā yasjud)</span>`
+       <span class="translit">(lā yasjud)</span>`,
+      `سجدت قبل السلام<br>
+       <small>(J’ai fait la prosternation avant le salām)</small><br>
+       <span class="translit">(sajadtu qabla as-salām)</span>`
     ],
-    correct: 0
+    correct: 2
   },
-  {
-    text: `
-      من نسي السجود القبلي حتى خرج من المسجد:<br>
-      <small>(Celui qui oublie la prosternation avant le salām jusqu’à sortir de la mosquée)</small><br>
-      <span class="translit">(man nasiya s-sujūda l-qabliyy ḥattā kharaja mina l-masjid)</span>
-    `,
-    answers: [
-      `فصلاته صحيحة<br>
-       <small>(Sa prière est correcte)</small><br>
-       <span class="translit">(faṣalātuhu ṣaḥīḥa)</span>`,
-      `بطلت صلاته<br>
-       <small>(Sa prière est annulée)</small><br>
-       <span class="translit">(baṭulat ṣalātuhu)</span>`,
-      `أعاد الصلاة<br>
-       <small>(Il refait la prière)</small><br>
-       <span class="translit">(aʿāda ṣ-ṣalāta)</span>`
-    ],
-    correct: 0
-  },
-  {
-    text: `
-      من نسي قراءة السورة بعد الفاتحة:<br>
-      <small>(Celui qui oublie la récitation après la Fātiḥa)</small><br>
-      <span class="translit">(man nasiya qirāʾata s-sūra baʿda l-fātiḥa)</span>
-    `,
-    answers: [
-      `سجد بعد السلام<br>
-       <small>(Il fait la prosternation après le salām)</small><br>
-       <span class="translit">(sajada baʿda as-salām)</span>`,
-      `سجد قبل السلام<br>
-       <small>(Il fait la prosternation avant le salām)</small><br>
-       <span class="translit">(sajada qabla as-salām)</span>`
-    ],
-    correct: 1
-  },
+ 
+ 
   {
     text: `
       من أنصت لمتحدث قليلا بطلت صلاته:<br>
@@ -548,56 +494,10 @@ const DEFAULT_QUESTIONS = [
        <small>(Faux)</small><br>
        <span class="translit">(khaṭaʾ)</span>`
     ],
-    correct: 1
-  },
-  {
-    text: `
-      ما حكم من نعس في الصلاة؟<br>
-      <small>(Quel est le jugement de celui qui somnole en prière ?)</small><br>
-      <span class="translit">(mā ḥukmu man naʿasa fī ṣ-ṣalāh?)</span>
-    `,
-    answers: [
-      `صلاته صحيحة<br>
-       <small>(Sa prière reste valide)</small><br>
-       <span class="translit">(ṣalātuhu ṣaḥīḥa)</span>`,
-      `يسجد قبل السلام<br>
-       <small>(Il doit faire la prosternation avant le salām)</small><br>
-       <span class="translit">(yasjudu qabla as-salām)</span>`
-    ],
     correct: 0
   },
-  {
-    text: `
-      من شك في حدث أو نجاسة ولم يتيقن:<br>
-      <small>(Celui qui doute d’un ḥadath ou d’une souillure sans certitude)</small><br>
-      <span class="translit">(man shakka fī ḥadath aw najāsah walam yatayaqqan)</span>
-    `,
-    answers: [
-      `أعاد الصلاة والوضوء معا<br>
-       <small>(Il refait la prière et les ablutions)</small><br>
-       <span class="translit">(aʿāda ṣ-ṣalāta wa-l-wuḍūʾ maʿan)</span>`,
-      `صلاته صحيحة<br>
-       <small>(Sa prière est valide)</small><br>
-       <span class="translit">(ṣalātuhu ṣaḥīḥa)</span>`
-    ],
-    correct: 1
-  },
-  {
-    text: `
-      وإن تيقن أنه متطهر:<br>
-      <small>(Et s’il est certain d’être en état de pureté)</small><br>
-      <span class="translit">(wa-in tayakkana annahu muṭahhir)</span>
-    `,
-    answers: [
-      `فصلاته صحيحة ولا شيء عليه<br>
-       <small>(Sa prière est valide et rien ne lui incombe)</small><br>
-       <span class="translit">(faṣalātuhu ṣaḥīḥa walā shayʾa ʿalayh)</span>`,
-      `أعاد الصلاة والوضوء معا<br>
-       <small>(Il refait la prière et les ablutions)</small><br>
-       <span class="translit">(aʿāda ṣ-ṣalāta wa-l-wuḍūʾ maʿan)</span>`
-    ],
-    correct: 0
-  },
+  
+  
   {
     text: "Dans le chapitre 4 de Xilass, dans lequel de ces vers Seydi Hadji Malick Sy évoque un chef d’armée pour la première fois ?",
     answers: [
@@ -621,22 +521,22 @@ const DEFAULT_QUESTIONS = [
   {
     text: "Complète le vers 29 : « Li'annahum hurumâtil-lâhi qad hatakû… »",
     answers: [
-      "idh qatalû anbiyâ'allâhi min jurumi",
       "hifzil-ilâhi bilâ shakkin walâ tuhami",
       "fatakdîbuhû qad jâ’a minal-‘alami",
-      "wa-kâna fî ṣaḥnihî nûrun muqaddami"
+      "wa-kâna fî ṣaḥnihî nûrun muqaddami",
+      "idh qatalû anbiyâ'allâhi min jurumi"
     ],
-    correct: 0
+    correct: 3
   },
   {
     text: "Quel bayit du Xilass Serigne Moustapha cite lors de Laylatul Qadr 2025 ?",
     answers: [
-      "« ma'arghada ar-rakhdou… » (correct)",
-      "« wa mā ilā ghayri rabbī l-yawma ahrtadū… »",
       "« fī kulli yawmin lanā nūrٌ yuʿaddadū… »",
+      "« wa mā ilā ghayri rabbī l-yawma ahrtadū… »",
+      "« ma'arghada ar-rakhdou… »",
       "« wa mā ṣanaʿūhu min al-buhtāni qad bafadū… »"
     ],
-    correct: 0
+    correct: 2
   },
   {
     text: "Selon l'explication donnée lors de Laylatul Qadr 2025, où classe-t-on « Iqra » ?",
@@ -647,7 +547,18 @@ const DEFAULT_QUESTIONS = [
       "Dans « asmā’u Allāh »"
     ],
     correct: 1
-  }
+  },
+  {
+  text: "Laylatul Qadr 2025 : Serigne Moustapha Sy a donné quel enseignement de « Iqra » ?",
+  answers: [
+    "Secondaire",
+    "Primaire",
+    "Secondaire et supérieur",
+    "Supérieur"
+  ],
+  correct: 3
+}
+
 ];
 
 
