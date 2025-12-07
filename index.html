@@ -357,7 +357,6 @@
 /***********************
  * 0. CONFIG FIREBASE  *
  ***********************/
-
 const firebaseConfig = {
   apiKey: "AIzaSyDLzJY6cAsVCGjr9UeVqtXIBDxJ5h6NidM",
   authDomain: "quiz-fiqh-daara.firebaseapp.com",
@@ -369,7 +368,6 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
-
 
 /***********************
  * 1. QUESTIONS PAR DÉFAUT
@@ -413,7 +411,7 @@ const SecureBackend = {
       teacherPin,
       questions,
       status: 'lobby',          // 'lobby' | 'running' | 'finished'
-      currentQuestion: null,    // null tant que pas lancé
+      currentQuestion: null,
       questionDuration,
       questionStartedAt: null,
       createdAt: Date.now()
@@ -536,6 +534,20 @@ const SecureBackend = {
     return { success: true };
   },
 
+  async finishQuiz(roomId, teacherPin) {
+    const roomRef = db.collection('rooms').doc(roomId);
+    const roomSnap = await roomRef.get();
+    if (!roomSnap.exists) return { success: false, error: "Salle introuvable" };
+    const room = roomSnap.data();
+    if (room.teacherPin !== teacherPin) {
+      return { success: false, error: "Non autorisé" };
+    }
+    await roomRef.update({
+      status: 'finished'
+    });
+    return { success: true };
+  },
+
   async getLeaderboard(roomId) {
     const roomRef = db.collection('rooms').doc(roomId);
     const snap = await roomRef.collection('students')
@@ -549,8 +561,8 @@ const SecureBackend = {
  * 3. ÉTAT GLOBAL
  ***********************/
 const State = {
-  mode: 'home',          // 'home' | 'teacher' | 'student' | 'studentWaiting'
-  teacherMode: 'lobby',  // 'lobby' | 'quiz'
+  mode: 'home',          // 'home' | 'teacher' | 'student' | 'studentWaiting' | 'studentFinished'
+  teacherMode: 'lobby',  // 'lobby' | 'quiz' | 'finished'
   roomId: '',
   teacherPin: '',
   studentName: '',
@@ -581,6 +593,7 @@ function render() {
   else if (State.mode === 'teacher') renderTeacher(app);
   else if (State.mode === 'student') renderStudent(app);
   else if (State.mode === 'studentWaiting') renderStudentWaiting(app);
+  else if (State.mode === 'studentFinished') renderStudentFinished(app);
 }
 
 /*********** HOME ***********/
@@ -716,6 +729,27 @@ function renderTeacher(container) {
     return;
   }
 
+  if (State.teacherMode === 'finished') {
+    container.innerHTML = `
+      <div class="header">
+        <h1>Quiz terminé ✅</h1>
+        <p>Salle: ${State.roomId}</p>
+      </div>
+      <div class="content" style="text-align:center;">
+        <p style="font-size:16px;margin-bottom:16px;">
+          Le quiz est terminé. Tu peux projeter le classement et annoncer les gagnants.
+        </p>
+        <button class="btn btn-primary" style="max-width:260px;margin:0 auto 12px;" onclick="showLeaderboard()">
+          🏆 Voir le classement
+        </button>
+        <button class="btn btn-secondary" style="max-width:260px;margin:0 auto;" onclick="backToHome()">
+          ⬅️ Retour à l’écran d’accueil
+        </button>
+      </div>
+    `;
+    return;
+  }
+
   // Mode quiz enseignant
   container.innerHTML = `
     <div class="quiz-header">
@@ -734,6 +768,7 @@ function renderTeacher(container) {
         </select>
         <button class="btn btn-secondary btn-small" onclick="shuffleQuestions()">🔀 Mélanger</button>
         <button class="btn btn-secondary btn-small" onclick="showLeaderboard()">🏆 Classement</button>
+        <button class="btn btn-secondary btn-small" onclick="finishQuizManual()">✅ Fin du quiz</button>
         <button class="btn btn-secondary btn-small" onclick="backToHome()">Quitter</button>
       </div>
     </div>
@@ -842,6 +877,31 @@ function renderStudent(container) {
         </div>
       ` : ''}
       ${State.error ? `<div class="error">${State.error}</div>` : ''}
+    </div>
+  `;
+}
+
+/*********** STUDENT FINISHED ***********/
+function renderStudentFinished(container) {
+  container.innerHTML = `
+    <div class="header">
+      <h1>Quiz terminé ✅</h1>
+      <p>Salle: ${State.roomId}</p>
+    </div>
+    <div class="content" style="text-align:center;">
+      <p style="font-size:18px;margin-bottom:16px;">Merci pour ta participation, <strong>${State.studentName}</strong> !</p>
+      <p style="font-size:16px;margin-bottom:8px;">
+        Ton score final est de :
+      </p>
+      <p style="font-size:32px;font-weight:900;color:#667eea;margin-bottom:20px;">
+        ${State.score} points
+      </p>
+      <p style="font-size:13px;color:#6b7280;margin-bottom:24px;">
+        L’enseignant peut maintenant afficher le classement sur l’écran principal.
+      </p>
+      <button class="btn btn-secondary" style="max-width:260px;margin:0 auto;" onclick="backToHome()">
+        ⬅️ Retour à l’écran d’accueil
+      </button>
     </div>
   `;
 }
@@ -967,9 +1027,20 @@ async function autoAdvanceAfterTimer() {
   if (State.currentQuestion < total - 1) {
     await nextQuestion();
   } else {
-    const lb = await SecureBackend.getLeaderboard(State.roomId);
-    showLeaderboard(lb);
+    await finishQuizInternal();
   }
+}
+
+async function finishQuizInternal() {
+  await SecureBackend.finishQuiz(State.roomId, State.teacherPin);
+  State.teacherMode = 'finished';
+  const lb = await SecureBackend.getLeaderboard(State.roomId);
+  showLeaderboard(lb);
+  render();
+}
+
+async function finishQuizManual() {
+  await finishQuizInternal();
 }
 
 async function showLeaderboard(preloaded) {
@@ -1028,7 +1099,9 @@ async function joinRoom() {
     const result = await SecureBackend.joinRoom(State.roomId, State.studentName);
     if (result.success) {
       State.studentId = result.studentId;
-      if (result.status === 'running' && result.currentQuestion !== null) {
+      if (result.status === 'finished') {
+        State.mode = 'studentFinished';
+      } else if (result.status === 'running' && result.currentQuestion !== null) {
         State.currentQuestion = result.currentQuestion;
         State.mode = 'student';
         State.startTime = Date.now();
@@ -1079,6 +1152,12 @@ function startPolling() {
   State.pollInterval = setInterval(async () => {
     const room = await SecureBackend.getRoom(State.roomId);
     if (!room) return;
+
+    if (room.status === 'finished') {
+      State.mode = 'studentFinished';
+      render();
+      return;
+    }
 
     if (State.mode === 'studentWaiting' && room.status === 'running' && room.currentQuestion !== null) {
       State.mode = 'student';
